@@ -1,0 +1,50 @@
+
+1、maven项目eclipse提示pom.ml有错，提示信息就是org.apache.maven.plugin.war.WarMojo
+	不论是编译时还是构建是抑或是构建时，在控制台出来还是通过弹框的方式提示出来，那么久需要检查这个对应的maven工程中的POM文件是不是是不是添加了对应的插件了。
+	目前爆出上面的措时，是由于这个工程没有添加这个插件：
+	<plugin>  
+		<groupId>org.apache.maven.plugins</groupId>  
+		<artifactId>maven-war-plugin</artifactId>  
+		<version>3.0.0</version>  
+	</plugin> 
+	
+	对应的版本符合自己的要求就好
+	
+	插件可以手动也可以通过eclipse添加
+	
+
+2、maven工程中的POM文件中的packaging 值，对应的是打包的方式
+	1.pom工程：用在父级工程或聚合工程中。用来做jar包的版本控制。
+	2.war工程：将会打包成war，发布在服务器上的工程。如网站或服务。
+	3.jar工程：将会打包成jar用作jar包使用。
+	
+3、构建项目部分
+	<build>
+		<finalName>helloworld</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.5.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.0.1</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	
+	build：项目构建时的配置
+	finalName：在浏览器中的访问路径，如果将它改成helloworld，再执行maven--update，这时运行项目的访问路径是
+                   http://localhost:8080/helloworld/   而不是项目名的  http://localhost:8080/test
+	plugins：插件，之前篇章已经说过，第一个插件是用来设置java版本为1.7，第二个插件是我刚加的，用来设置编码为utf-8
+	group id+artifact id+version：插件在仓库中的坐标
+	configuration：设置插件的参数值

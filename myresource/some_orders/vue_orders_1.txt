@@ -1,0 +1,8 @@
+VUE
+
+npm和cnpm的区别：
+	npm节点包管理器，用与nodejs中节点插件管理，其中包括插件的安装和卸载以及管理依赖的功能呢
+	
+	
+	npm命令的用法见vue_order_2.txt
+	

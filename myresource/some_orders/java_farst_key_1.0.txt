@@ -1,0 +1,32 @@
+java_fastkey
+1、Ctrl+1				快速修复
+2、Ctrl+d				删除光标所在的当前行
+3、Ctrl+Alt+↓/↑ 		复制当前行到下|上一行(复制增加)
+4、Alt+↓/↑				移动当前行到下|上一行
+5、Alt+enter			显示当前选中的资源
+6、Shift+Enter			在当前行的下一行插入空行
+7、Shift+Ctrl+Enter 	在当前行的上一行插入空行
+8、Ctrl+Q 				定位到最后编辑的地方
+9、Ctrl+L				定位在某行
+10、Ctrl+M				最大化
+11、Ctrl+/				注释当前行
+12、Ctrl+O				显示Outline
+13、Ctrl+T 				快速显示当前类的继承结构
+14、Ctrl+W 				关闭当前Editer
+15、Ctrl+K				参照选中的Word快速定位到下一个
+16、Ctrl+/(小键盘) 		折叠当前类中的所有代码
+17、Ctrl+×(小键盘) 		展开当前类中的所有代码
+18、Ctrl+Shift+E 		显示管理当前打开的所有的View的管理器
+19、Ctrl+E 				快速显示当前Editer的下拉列表
+20、Ctrl+Shift+X 		把当前选中的文本全部变味小写
+21、Ctrl+Shift+Y		把当前选中的文本全部变味小写
+22、Ctrl+Shift+P		定位到对于的匹配符(譬如{}) 
+23、Alt+Shift+R 		重命名
+24、Alt+Shift+M 		抽取方法 (这是重构里面最常用的方法之一了,尤其是对一大堆泥团代码有用)
+25、Alt+Shift+C 		修改函数结构(比较实用,有N个函数调用了这个方法,修改一次搞定)
+26、Alt+Shift+L 		抽取本地变量( 可以直接把一些魔法数字和字符串抽取成一个变量,尤其是多处调用的时候)
+27、Alt+Shift+F 		把Class中的local变量变为field变量 (比较实用的功能)
+28、Alt+Shift+I 		合并变量(可能这样说有点不妥Inline)
+29、Alt+Shift+V			移动函数和变量(不怎么常用)
+30、Alt+Shift+Z			重构的后悔药(Undo)
+

@@ -1,0 +1,18 @@
+﻿1、SpringBoot入门，整合Redis实现缓存
+	https://blog.csdn.net/qq_27317475/article/details/81188642
+	https://my.oschina.net/u/2935623/blog/2223054
+	
+2、springboot项目搭建及常用技术整合
+	https://www.cnblogs.com/leskang/p/10942506.html
+
+3、常量类的定义
+	https://www.cnblogs.com/lihaoyang/p/6913295.html
+	
+4、lombok的使用
+	https://blog.csdn.net/qq_22860341/article/details/81224890
+	
+	
+5、若是项目是一个不需要数据的一个工程那么若是我们不对工程的启动类就处理一下的话，在工程启动的过程中就会报错导致工程无法启动
+	问题的修改方法是在启动类上将数据库配置进行去除
+	@SpringBootApplication(exclude={DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class})
+	这样我们的工程就是一个脱离数据存在的工程了这样的配置一般是因为我这个工程是单独进行放置前端文件的。

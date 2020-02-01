@@ -1,0 +1,72 @@
+﻿出现的问题：
+1、
+		Another git process seems to be running in this repository, e.g.
+		an editor opened by 'git commit'. Please make sure all processes
+		are terminated then try again. If it still fails, a git process
+		may have crashed in this repository earlier:
+		remove the file manually to continue.
+	解决方案：进入项目文件夹下的 .git文件中（显示隐藏文件夹或rm .git/index.lock）删除index.lock文件即可。
+			使用手动也是可以的，使用命令行也是可以的 rm -f .git/index.lock
+	
+2、gitignore文件无法忽略某些文件
+		在管理一个版本库时，有时候不想要管理某些文件，这个时候我就把这个问件写到.gitignore文件中，
+		这样应该就可以将这个文件忽略，不再进行·版本管理了，但是经常出现的情况是：将这些文件名写到其中了，使用	git status
+		查看发现这些文件并没有被忽略掉。查了资料发现，想要.gitignore起作用，必须要在这些文件不在暂存区中才可以，
+		.gitignore文件只是忽略没有被staged(cached)文件，对于已经被staged文件，加入ignore文件时一定要先从staged移除，才可以忽略。 
+		git rm –cached testFile
+
+		这样，在.gitignore中写testFile，这个文件才可以被忽略掉
+
+		本文来自 行者向阳 的CSDN 博客 ，全文地址请点击：https://blog.csdn.net/y491887095/article/details/73250583?utm_source=copy 
+		
+3、将仓库中的某个文件删除
+	demo：
+		git rm -cache build/scripts/index.js
+		
+4、提交本地代码到远程仓库
+	git push origin develop
+5、git commit 时：  
+	fatal: could not open '.git/COMMIT_EDITMSG': Permission denied 1
+	解决方案
+	直接删除’.git/COMMIT_EDITMSG 文件解决
+	---------------------
+	
+	本文来自 程序手艺人 的CSDN 博客 ，全文地址请点击：https://blog.csdn.net/z2066411585/article/details/80821311?utm_source=copy 
+	
+6、新的好使俄的tomcat部署完成maven项目后启动报错，不影响tomcat本身的运行
+	6.1、[SetContextPropertiesRule]{Context} Setting property 'source' to 'org.eclipse.jst.jee.server:org.joven.foundation.utils' did not find a matching property.
+	6.2、ServletContext resource [/WEB-INF/applicationContext.xml]
+		在web—inf 下加个空的文件
+	6.3、org.apache.catalina.core.StandardContext.listenerStop Exception sending context destroyed event to listener instance of class [org.springframework.web.context.ContextLoaderListener]
+	
+	6.4、java.lang.InstantiationError: com.opensymphony.xwork2.util.finder.ClassFinder
+		使用的Strust的包的版本对应不上
+7、Error configuring application listener of class [org.springframework.web.context.ContextLoaderListener] java.lang.ClassNotFoundException: org.springframework.web.context.ContextLoaderListener
+
+
+8、目前使用解决方法，将代码发布到webapp下面的同时修改 service.xml中的文件
+	<Context docBase="org.joven.foundation.utils" path="/org.joven.foundation.utils"
+					reloadable="true" source="org.eclipse.jst.jee.server:org.joven.foundation.utils" />
+	去掉source属性 6 7 问题不再出来
+	
+6\7\8:
+	前提：在tomcat的eclipse中tomcat的配置文件中，Server Options中 publish module contexts to separeate xml files 未勾选
+		若是在eclipse中将server.xml 中的Context改为<Context docBase="org.joven.foundation.utils" path="/org.joven.foundation.utils" reloadable="true" /> 再进行publish时 要保证代码发布到了webapp下面而不是其他目录下面，要是发布到其他的下面手手动到tomcat的配置中加上就好
+	
+	若是勾选了 在tomcat的eclipse中tomcat的配置文件中，Server Options中 publish module contexts to separeate xml files 的
+		再重新部署时 会发现在tomcat的conf文件夹中的service.xml中没有了<Context docBase。。。> 部分，而是在Catalina.localhost中多了个xml的文件，打开后发现就是将<Context docBase。。。> 部分单独拿了出来的。
+		由于每次的部署是在eclipse中的service.xml中都会自动生成<Context docBase。。。>，同时对于eclipse开发而言都会默认有个surce的属性，这时我们可以将这个属性删除在进行publish 就会发现单独提出来的那个文件中有得力source这个属性，删除它，这是启动时就不会报错 [SetContextPropertiesRule]{Context} Setting property 'source' to 'org.eclipse.jst.jee.server:。。。
+	
+	各种的网站说了这样那样的，看了外国人的说法是这个可以忽略的。
+	https://stackoverflow.com/questions/3566146/setting-property-source-to-org-eclipse-jst-jee-serverjsftut-did-not-find-a
+	
+
+idea 设置导入包不带*
+	打开我们的idea
+
+	点开file->Settings，搜索java，在Code style里面找到imports选项，设置导入类数值阈值，默认同包类是超过5个变成*,静态导入超过3个变成*，这里我们改成10个，最好是公司统一，不然很烦。。。实在不想见到*就改成很大的数值，比如999，设置完成之后最上面选的scheme是default，对所有项目都生效。
+
+
+	版权声明：本文为CSDN博主「划过风的记忆」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。
+	原文链接：https://blog.csdn.net/qq_28056641/article/details/81202615
+

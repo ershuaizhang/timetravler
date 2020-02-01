@@ -1,0 +1,102 @@
+1、浏览器支持下面的写法
+	JSON.stringify(jsObj);// obj ---->json
+	JSON.parse(jsObj);  // json--->obj
+2、JQuery 的原生
+	$.parseJson(jsonStr);// JQuery.parseJson(jsonStr);  JQuery原生支持
+3、URL编码
+	%27 ：'
+	
+	Javascript函数：encodeURI()
+	encodeURI()是Javascript中真正用来对URL编码的函数。
+	它着眼于对整个URL进行编码，因此除了常见的符号以外，对其他一些在网址中有特殊含义的符号“; / ? : @ & = + $ , #”，也不进行编码。编码后，它输出符号的utf-8形式，并且在每个字节前加上%。
+	它对应的解码函数是decodeURI()。
+	需要注意的是，它不对单引号'编码。
+
+	Javascript函数：encodeURIComponent()
+	最后一个Javascript编码函数是encodeURIComponent()。与encodeURI()的区别是，它用于对URL的组成部分进行个别编码，而不用于对整个URL进行编码。
+	因此，“; / ? : @ & = + $ , #”，这些在encodeURI()中不被编码的符号，在encodeURIComponent()中统统会被编码。至于具体的编码方法，两者是一样。
+	它对应的解码函数是decodeURIComponent()。		
+4、js判断对象是否为空对象的几种方法
+	1.将json对象转化为json字符串，再判断该字符串是否为"{}"
+	var data = {};
+	var b = (JSON.stringify(data) == "{}");
+	alert(b);//true
+		1.1
+	if (JSON.stringify(d) == "{}") {
+		console.log(true);//为空
+	}else{
+		console.log(false);//不为空
+	}
+
+	
+	2.for in 循环判断
+	var obj = {};
+	var b = function() {
+	for(var key in obj) {
+	return false;
+	}
+	return true;
+	}
+	alert(b());//true
+
+	3.jquery的isEmptyObject方法
+	此方法是jquery将2方法(for in)进行封装，使用时需要依赖jquery
+	var data = {};
+	var b = $.isEmptyObject(data);
+	alert(b);//true
+
+	4.Object.getOwnPropertyNames()方法
+	此方法是使用Object对象的getOwnPropertyNames方法，获取到对象中的属性名，存到一个数组中，返回数组对象，我们可以通过判断数组的length来判断此对象是否为空
+	注意：此方法不兼容ie8，其余浏览器没有测试
+	var data = {};
+	var arr = Object.getOwnPropertyNames(data);
+	alert(arr.length == 0);//true
+
+	5.使用ES6的Object.keys()方法
+	与4方法类似，是ES6的新方法, 返回值也是对象中属性名组成的数组
+	var data = {};
+	var arr = Object.keys(data);
+	alert(arr.length == 0);//true
+5、	
+	1、JSON.stringify  兼容ie8
+
+	2、Object.getOwnPropertyNames 或者 Object.keys 兼容ie9
+
+	3、循环判断 isEmptyObj 全兼容
+
+	4、利用其他库判断如：jq类似
+
+	var obj = {name:1};
+  
+	//兼容ie8
+	if(JSON.stringify(obj) == "{}"){ 
+		console.log('JSON.stringify方法：is empty');
+	}else{
+		console.log('JSON.stringify方法：not empty');
+	}
+	 
+	 
+	// 兼容ie9
+	if(Object.getOwnPropertyNames(obj).length == 0){
+		console.log("Object.getOwnPropertyNames方法:is empty")
+	}else{
+		console.log("Object.getOwnPropertyNames方法:not empty")
+	}
+	 
+	// 或者 兼容ie9
+	if(Object.keys(obj).length == 0){
+		console.log("Object.keys方法:is empty")
+	}else{
+		console.log("Object.keys方法:not empty")
+	}
+	 
+	 
+	function isEmptyObj(obj){
+		for(key in obj){
+			if(key){
+				return "for循环方法：not empty"
+			}
+		}
+		return "for循环方法：is empty"
+	}
+	console.log(isEmptyObj(obj));

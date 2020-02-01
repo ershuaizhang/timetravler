@@ -1,0 +1,20 @@
+MyBatis中#{}和${}的区别    			
+	#{}：占位符号，好处防止sql注入 （替换结果会增加单引号‘’）
+　　${}：sql拼接符号 不会转义字符串（替换结果不会增加单引号‘’，like和order by后使用，存在sql注入问题，需手动代码中过滤）
+	示例1： 
+	执行SQL：Select * from emp where name = #{employeeName} 
+	参数：employeeName=>Smith 
+	解析后执行的SQL：Select * from emp where name = ？ 
+	执行SQL：Select * from emp where name = ${employeeName} 
+	参数：employeeName传入值为：Smith 
+	解析后执行的SQL：Select * from emp where name =Smith
+
+
+
+foreach元素的属性主要有 item，index，collection，open，separator，close。
+		https://www.cnblogs.com/fangyu19900812/p/6046209.html
+    item表示集合中每一个元素进行迭代时的别名，
+    index指 定一个名字，用于表示在迭代过程中，每次迭代到的位置，
+    open表示该语句以什么开始，
+    separator表示在每次进行迭代之间以什么符号作为分隔 符，
+    close表示以什么结束。

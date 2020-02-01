@@ -1,0 +1,84 @@
+﻿mysql 
+链接时的url中的参数解析
+
+
+dbc.driverClassName=com.mysql.jdbc.Driver
+jdbc.url=jdbc:mysql://localhost:3306/database?useUnicode=true&characterEncoding=utf8&autoReconnect=true&rewriteBatchedStatements=TRUE
+jdbc.username=root
+jdbc.password=password
+
+database.url=jdbc:mysql://database_server:3306/oauth?autoReconnect=true&useUnicode=true&createDatabaseIfNotExist=true&characterEncoding=utf8&useSSL=true&serverTimezone=UTC
+
+ 
+
+特别说明其中的jdbc.url配置：如果你已经升级好了mysql-connector，其中的characterEncoding=utf8可以被自动被识别为utf8mb4（当然也兼容原来的utf8），而autoReconnect配置我强烈建议配上，我之前就是忽略了这个属性，导致因为缓存缘故，没有读取到DB最新配置，导致一直无法使用utf8mb4字符集，多么痛的领悟！！
+
+没有让mysql驱动开启批量执行sql的开关。
+怎么开启呢？在拼装mysql链接的url时，为其加上allowMultiQueries参数，设置为true，如下：
+
+jdbc.jdbcUrl=jdbc:mysql://127.0.0.1:3306/database?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
+
+
+
+
+mysql JDBC URL格式如下： 
+
+jdbc:mysql://[host:port],[host:port].../[database][?参数名1][=参数值1][&参数名2][=参数值2]... 
+
+常用的几个较为重要的参数： 
+
+参数名称 参数说明 缺省值 最低版本要求 
+user 数据库用户名（用于连接数据库） 所有版本 
+passWord 用户密码（用于连接数据库） 所有版本 
+useUnicode 是否使用Unicode字符集，如果参数characterEncoding设置为gb2312或gbk，本参数值必须设置为true false 1.1g 
+characterEncoding 当useUnicode设置为true时，指定字符编码。比如可设置为gb2312或gbk false 1.1g 
+autoReconnect 当数据库连接异常中断时，是否自动重新连接？ false 1.1 
+autoReconnectForPools 是否使用针对数据库连接池的重连策略 false 3.1.3 
+failOverReadOnly 自动重连成功后，连接是否设置为只读？ true 3.0.12 
+maxReconnects autoReconnect设置为true时，重试连接的次数 3 1.1 
+initialTimeout autoReconnect设置为true时，两次重连之间的时间间隔，单位：秒 2 1.1 
+connectTimeout 和数据库服务器建立socket连接时的超时，单位：毫秒。 0表示永不超时，适用于JDK 1.4及更高版本 0 3.0.1 
+socketTimeout socket操作（读写）超时，单位：毫秒。 0表示永不超时 0 3.0.1 
+
+对应中文环境，通常mysql连接URL可以设置为： 
+
+代码如下:
+jdbc:mysql://localhost:3306/test?user=root&password=&useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false 
+
+在使用数据库连接池的情况下，最好设置如下两个参数： 
+
+autoReconnect=true&failOverReadOnly=false 
+需要注意的是，在xml配置文件中，url中的&符号需要转义成  &amp;  。
+比如在tomcat的server.xml中配置数据库连接池时，mysql jdbc url样例如下： 
+代码如下:
+jdbc:mysql://localhost:3306/test?user=root&amp;password=&amp;useUnicode=true&amp;characterEncoding=utf8&amp;autoReconnect=true&amp;failOverReadOnly 
+http://www.jb51.net/article/47764.htm
+
+ 
+
+jdbc:mysql://127.0.0.1:3306/demo_ds?useServerPrepStmts=true&cachePrepStmts=true
+设置参数useServerPrepStmts=true，这个参数的作用是让MySQL服务进行prepare。没有这个参数就是让JDBC进行prepare，MySQL完全感知不到，是没有什么意义的。
+cachePrepStmts=true这个参数的意思是告诉JDBC缓存需要prepare的SQL
+
+https://www.cnblogs.com/softidea/p/9180189.html
+
+ 
+
+在spring boot  2.1.6.RELEASE 中，如果没有配置&serverTimezone=UTC 时区值 ， 就会一直报错：
+
+
+
+
+
+问题：
+	Error Code: 1175. You are using safe update mode and you tried to update a table without a WHERE that 
+	uses a KEY column To disable safe mode, toggle the option in Preferences -> SQL Editor -> Query Editor and reconnect.
+
+	SQL_SAFE_UPDATES有两个取值0和1，
+	SQL_SAFE_UPDATES = 1时，不带where和limit条件的update和delete操作语句是无法执行的，即使是有where和limit条件但不带key column的update和delete也不能执行。
+	SQL_SAFE_UPDATES = 0时，update和delete操作将会顺利执行。那么很显然，此变量的默认值是1。
+	所以，出现1175错误的时候，可以先设置SQL_SAFE_UPDATES的值为0，然后再执行更新
+
+
+执行创建函数的sql语句时，提示:This function has none of DETERMINISTIC, NO SQL, or READS SQL DATA in its declaration and binary logging is enabled
+	https://www.cnblogs.com/kiko2014551511/p/11527423.html

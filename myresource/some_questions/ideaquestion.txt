@@ -1,0 +1,11 @@
+1、Idea导入maven项目不自动识别
+	选中module的pom.xml，右键，选择" add as maven project",即可刷新为maven项目 --- 解决
+
+2、模板问题
+	https://blog.csdn.net/sdut406/article/details/81750858
+	
+3、
+4、
+5、
+6、
+7、

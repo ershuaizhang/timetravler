@@ -1,0 +1,142 @@
+﻿https://www.cnblogs.com/lone5wolf/p/10955780.html
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!--顺序不能变-->
+	<properties></properties>
+	<settings>
+		<setting name="" value=""/>
+	</settings>
+	<typeAliases>
+		<package name="com.joven.base.entity"/>
+	</typeAliases>
+	<!--<typeHandlers></typeHandlers>
+    <objectFactory type=""></objectFactory>
+    <plugins>
+        <plugin interceptor=""></plugin>
+    </plugins>
+    <environments default="">
+        <environment id="">
+            <transactionManager type=""></transactionManager>
+            <dataSource type=""></dataSource>
+        </environment>
+    </environments>
+    <databaseIdProvider type=""></databaseIdProvider>
+    <mappers>
+        <package name="com.joven.base.mapper"/>
+    </mappers>
+</configuration>
+
+
+2、properties
+     将数据库连接参数单独配置在db.properties(名称可变)中，放在类路径下。这样只需要在SqlMapConfig.xml中加载db.properties的属性值。这样在SqlMapConfig.xml中就不需要对数据库连接参数硬编码。将数据库连接参数只配置在db.properties中，原因：方便对参数进行统一管理，其它xml可以引用该db.properties
+ 
+ 例如：db.properties
+     jdbc.driver=com.mysql.jdbc.Driver
+     jdbc.url=jdbc:mysql://localhost:3306/mybatis
+     jdbc.username=root
+     jdbc.password=root
+ 
+	 相应的SqlMapConfig.xml
+	   <properties resource="db.properties"/>
+		<environments default="development">
+			<environment id="development">
+				<transactionManager type="JDBC"/>
+				<dataSource type="POOLED">
+					<property name="driver" value="${jdbc.driver}"/>
+					<property name="url" value="${jdbc.url}"/>
+					<property name="username" value="${jdbc.username}"/>
+					<property name="password" value="${jdbc.password}"/>
+				</dataSource>
+			</environment>
+		</environments>
+ 
+	注意： MyBatis 将按照下面的顺序来加载属性：
+	 首先、在properties标签中指定的属性文件首先被读取。
+	 其次、会读取properties元素中resource或 url 加载的属性，它会覆盖已读取的同名属性。
+	 最后、读取parameterType传递的属性，它会覆盖已读取的同名属性。
+	常用做法：
+	 不要在properties元素体内添加任何属性值，只将属性值定义在外部properties文件中。
+	 在properties文件中定义属性名要有一定的特殊性，如：XXXXX.XXXXX.XXXX的形式，就像jdbc.driver。这样可以防止和parameterType传递的属性名冲突，从而被覆盖掉。
+ 
+3、settings
+ mybatis全局配置参数，全局参数将会影响mybatis的运行行为。比如：开启二级缓存、开启延迟加载。具体可配置情况如下：
+  
+配置示例：
+    <settings>
+       <setting name="cacheEnabled" value="true"/>
+       <setting name="lazyLoadingEnabled" value="true"/>
+       <setting name="multipleResultSetsEnabled" value="true"/>
+    </settings>
+ 
+4、typeAliases
+   typeAliases可以用来自定义别名。在mapper.xml中，定义很多的statement，而statement需要parameterType指定输入参数的类型、需要resultType指定输出结果的映射类型。如果在指定类型时输入类型全路径，不方便进行开发，可以针对parameterType或resultType指定的类型定义一些别名，在mapper.xml中通过别名定义，方便开发。
+   例如：
+    <typeAliases>
+        <!-- 单个别名定义 -->
+        <typeAlias alias="user" type="com.kang.pojo.User"/>
+        <!-- 批量别名定义，扫描整个包下的类，别名为类名（首字母大小写都可以） -->
+        <package name="com.kang.pojo"/>
+        <package name="其它包"/>
+    </typeAliases>
+   mapper.xml的引用形式
+    <select id="findUserById" parameterType="int" resultType="user">
+            SELECT * FROM USER WHERE id=#{value}
+    </select>
+ 
+5、typeHandlers
+    mybatis中通过typeHandlers完成jdbc类型和java类型的转换。通常情况下，mybatis提供的类型处理器满足日常需要，不需要自定义。具体可参考Mybatis的官方文档。
+6、environments
+   MyBatis 可以配置多种环境。这会帮助你将 SQL 映射应用于多种数据库之中。但是要记得一个很重要的问题：你可以配置多种环境，但每个数据库对应一个 SqlSessionFactory。所以，如果你想连接两个数据库，你需要创建两个 SqlSessionFactory 实例，每个数据库对应一个。而如果是三个数据库，你就需要三个实例，以此类推。
+   为了明确创建哪种环境，你可以将它作为可选的参数传递给 SqlSessionFactoryBuilder。
+   可以接受环境配置的两个方法签名是：
+       SqlSessionFactory factory = sqlSessionFactoryBuilder.build(reader, environment);
+       SqlSessionFactory factory = sqlSessionFactoryBuilder.build(reader,environment,properties);
+   如果环境被忽略，那么默认环境将会被加载，按照如下方式进行：
+       SqlSessionFactory factory = sqlSessionFactoryBuilder.build(reader);
+       SqlSessionFactory factory = sqlSessionFactoryBuilder.build(reader,properties);
+ 
+配置示例：
+ 
+    <environments default="development">
+         <environment id="development">
+             <!-- 使用jdbc事务管理，事务控制由mybatis-->
+              <transactionManager type="JDBC" />
+             <!-- 数据库连接池，由mybatis管理-->
+                <dataSource type="POOLED">
+                   <property name="driver" value="${jdbc.driver}" />
+                   <property name="url" value="${jdbc.url}" />
+                   <property name="username" value="${jdbc.username}" />
+                   <property name="password" value="${jdbc.password}" />
+               </dataSource>
+          </environment>
+    </environments>
+ 
+	注意:
+	---默认的环境 ID（比如： default=”development”）。
+	---每个 environment 元素定义的环境 ID（比如： id=”development”）。
+	---事务管理器的配置（比如： type=”JDBC”）。
+	默认的环境和环境 ID 是自我解释的。你可以使用你喜欢的名称来命名，只要确定默认的要匹配其中之一。
+
+mappers
+   Mapper配置的几种方法：
+     第一种（常用）
+        <mapper resource=" " /> resource指向的是相对于类路径下的目录
+         如：<mapper resource="sqlmap/User.xml" />
+     第二种
+        <mapper url=" " /> 使用完全限定路径
+         如：<mapper url="file:///D:\workspace\mybatis1\config\sqlmap\User.xml" />
+     第三种
+        <mapper class=" " /> 使用mapper接口类路径
+         如：<mapper class="cn.kang.mapper.UserMapper"/>
+		注意：此种方法要求mapper接口名称和mapper映射文件名称相同，且放在同一个目录中。
+     第四种（推荐）
+        <package name=""/> 注册指定包下的所有mapper接口
+         如：<package name="cn.kang.mapper"/>
+		注意：此种方法要求mapper接口名称和mapper映射文件名称相同，且放在同一个目录中。
+		使用示例：
+		<mappers>
+			<mapper resource="sqlmap/User.xml"/>
+			<package name="cn.kang.mapper"/>
+		</mappers>

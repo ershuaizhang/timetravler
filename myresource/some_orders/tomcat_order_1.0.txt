@@ -1,0 +1,8 @@
+﻿查看tomcat版
+	1、打开dos命令（windows键+r，输入cmd）
+	2、进入tomcat的bin目录，例如 cd F:\tools\apache-tomcat-8.5.37\bin，再输入f: 回车
+	3、输入catalina version 回车
+	4、完成。
+
+	architecture的后面，x86就是32位，amd64就是64位
+	

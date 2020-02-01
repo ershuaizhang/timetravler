@@ -1,0 +1,140 @@
+--创建表空间和临时表空间
+create tablespace TIMETRAVEL_USER datafile 'D:\APP\ADMINISTRATOR\ORADATA\ORCL\TIMETRAVEL_USER.DBF' 
+size 200m
+autoextend on
+next 32m maxsize 2048m;
+
+create temporary tablespace TIMETRAVEL_TEMP tempfile 'D:\APP\ADMINISTRATOR\ORADATA\ORCL\TIMETRAVEL_TEMP.DBF' size 50M autoextend ON next 10M maxsize 100M; 
+
+--oracle怎么查看用户属于哪个表空间 用如下语句查看：
+
+select username,default_tablespace from dba_users  where username='用户名';
+
+--查询概要文件信息： select * from SYS.DBA_PROFILES;
+
+select * from SYS.DBA_PROFILES where profile='DEFAULT';
+
+
+--oracle的系统和对象权限列表 
+alter any cluster 修改任意簇的权限
+alter any index 修改任意索引的权限
+alter any role 修改任意角色的权限
+alter any sequence 修改任意序列的权限
+alter any snapshot 修改任意快照的权限
+alter any table 修改任意表的权限
+alter any trigger 修改任意触发器的权限
+alter cluster 修改拥有簇的权限
+alter database 修改数据库的权限
+alter procedure 修改拥有的存储过程权限
+alter profile 修改资源限制简表的权限
+alter resource cost 设置佳话资源开销的权限
+alter rollback segment 修改回滚段的权限
+alter sequence 修改拥有的序列权限
+alter session 修改数据库会话的权限
+alter sytem 修改数据库服务器设置的权限
+alter table 修改拥有的表权限
+alter tablespace 修改表空间的权限
+alter user 修改用户的权限
+analyze 使用analyze命令分析数据库中任意的表、索引和簇
+audit any 为任意的数据库对象设置审计选项
+audit system 允许系统操作审计
+backup any table 备份任意表的权限
+become user 切换用户状态的权限
+commit any table 提交表的权限
+create any cluster 为任意用户创建簇的权限
+create any index 为任意用户创建索引的权限
+create any procedure 为任意用户创建存储过程的权限
+create any sequence 为任意用户创建序列的权限
+create any snapshot 为任意用户创建快照的权限
+create any synonym 为任意用户创建同义名的权限
+create any table 为任意用户创建表的权限
+create any trigger 为任意用户创建触发器的权限
+create any view 为任意用户创建视图的权限
+create cluster 为用户创建簇的权限
+create database link 为用户创建的权限
+create procedure 为用户创建存储过程的权限
+create profile 创建资源限制简表的权限
+create public database link 创建公共数据库链路的权限
+create public synonym 创建公共同义名的权限
+create role 创建角色的权限
+create rollback segment 创建回滚段的权限
+create session 创建会话的权限
+create sequence 为用户创建序列的权限
+create snapshot 为用户创建快照的权限
+create synonym 为用户创建同义名的权限
+create table 为用户创建表的权限
+create tablespace 创建表空间的权限
+create user 创建用户的权限
+create view 为用户创建视图的权限
+delete any table 删除任意表行的权限
+delete any view 删除任意视图行的权限
+delete snapshot 删除快照中行的权限
+delete table 为用户删除表行的权限
+delete view 为用户删除视图行的权限
+drop any cluster 删除任意簇的权限
+drop any index 删除任意索引的权限
+drop any procedure 删除任意存储过程的权限
+drop any role 删除任意角色的权限
+drop any sequence 删除任意序列的权限
+drop any snapshot 删除任意快照的权限
+drop any synonym 删除任意同义名的权限
+drop any table 删除任意表的权限
+drop any trigger 删除任意触发器的权限
+drop any view 删除任意视图的权限
+drop profile 删除资源限制简表的权限
+drop public cluster 删除公共簇的权限
+drop public database link 删除公共数据链路的权限
+drop public synonym 删除公共同义名的权限
+drop rollback segment 删除回滚段的权限
+drop tablespace 删除表空间的权限
+drop user 删除用户的权限
+execute any procedure 执行任意存储过程的权限
+execute function 执行存储函数的权限
+execute package 执行存储包的权限
+execute procedure 执行用户存储过程的权限
+force any transaction 管理未提交的任意事务的输出权限
+force transaction 管理未提交的用户事务的输出权限
+grant any privilege 授予任意系统特权的权限
+grant any role 授予任意角色的权限
+index table 给表加索引的权限
+insert any table 向任意表中插入行的权限
+insert snapshot 向快照中插入行的权限
+insert table 向用户表中插入行的权限
+insert view 向用户视图中插行的权限
+lock any table 给任意表加锁的权限
+manager tablespace 管理（备份可用性）表空间的权限
+references table 参考表的权限
+restricted session 创建有限制的数据库会话的权限
+select any sequence 使用任意序列的权限
+select any table 使用任意表的权限
+select snapshot 使用快照的权限
+select sequence 使用用户序列的权限
+select table 使用用户表的权限
+select view 使用视图的权限
+unlimited tablespace 对表空间大小不加限制的权限
+update any table 修改任意表中行的权限
+update snapshot 修改快照中行的权限
+update table 修改用户表中的行的权限
+update view 修改视图中行的权限
+
+
+
+-- Create the user 
+create user READ_USER
+  identified by "read_user"
+  default tablespace TIMETRAVEL_USER
+  temporary tablespace TIMETRAVEL_TEMP
+  profile PASSWD_UNLIMIT;
+-- Grant/Revoke role privileges 
+grant base_role to READ_USER;
+grant resource to READ_USER;
+-- Grant/Revoke system privileges 
+grant create database link to READ_USER;
+grant create sequence to READ_USER;
+grant create session to READ_USER;
+grant create synonym to READ_USER;
+grant create table to READ_USER;
+grant create view to READ_USER;
+
+--把所有表的查询权限赋给另一个用户
+grant select any table to 'QUERY';

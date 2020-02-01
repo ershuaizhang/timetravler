@@ -1,0 +1,93 @@
+比较不长用的命令，部分仅仅在本地有效
+	# git status显示unicode/乱码
+	$ git config --global core.quotepath false
+	# Checkout 出现文件路径超长时执行命令：
+	$ git config --global core.longpaths true 
+	
+上传文件太大时（默认10m）：
+	进入远程git。找到project settings 打开Git hooks ，修改Maximum file size
+	
+git bush中如何退出vim编辑器
+	按Esc退出输入模式进入命令行模式也是系统默认模式。
+
+	o，i，a都可以进入输入模式。
+	在命令模式下键入ZZ或者:wq保存修改并且退出 。
+	如果只想保存文件，则键入:w，回车后底行会提示写入操作结果，并保持停留在命令模式。
+	放弃所有文件修改，按下Esc键进入命令模式，键入:q! 回车后放弃修改并退出。
+	放弃所有文件修改，但不退出，即回退到文件打开后，最后一次保存操作的状态，继续进行文件操作。按下Esc键进入命令模式，键入:e! ，回车后回到命令模式。
+
+	作者：女王陛下的喵
+	链接：https://www.jianshu.com/p/1bb48c844ac4
+
+	Vim主要有如下两种模式：
+	（1）.Normal 模式。
+	（2）.Insert 模式。
+	Normal 模式：
+	（1）.点击ESC键或者Ctrl + [组合键进入此模式。
+	（2）.又称作为命令模式。
+	（3）.此模式下无法输入内容，但是可以赋值黏贴，保存或者退出。
+	（4）.此模式下，按下:w表示保存，:q表示离开（如果未保存会有提示），:wq表示保存并离开。
+	Insert 模式:
+	（1）.点击i、a 或 o 键可以进入此模式。
+	（2）.i表示在光标当前位置插入，a表示在光标下一个位置插入，o表示在新一行插入。
+	（3）.I表示在行首插入，A表示在行尾插入。
+
+	插入文字之后是由esc进入命令行模式，：进入底行模式。
+	通过查资料，按理说vi编辑器
+	输入：
+	: w filename （将文章以指定的文件名filename保存）
+	: wq (存盘并退出vi)
+	: q! (不存盘强制退出vi)
+	: q (不存盘退出vi)
+
+
+附0：
+	如何清除git仓库的所有提交记录，成为一个新的干净仓库
+	1.切换到新的分支
+		git checkout --orphan latest_branch
+　　2.缓存所有文件（除了.gitignore中声明排除的）
+		git add -A
+　　3.提交跟踪过的文件（Commit the changes）
+		git commit -am "commit message"
+　　4.删除master分支（Delete the branch）
+		git branch -D master
+　　5.重命名当前分支为master（Rename the current branch to master）
+		git branch -m master
+　　6.提交到远程master分支 （Finally, force update your repository）
+		git push -f origin master
+　　通过以上几步就可以简单地把一个Git仓库的历史提交记录清除掉了，不过最好还是在平时的开发中严格要求一下提交日志的规范，尽量避免在里面输入一些敏感信息进来。
+
+附1：
+	使用命名或者工具和github网站交互时一直超时22 的解决方法
+	测试 Github 连接是否畅通，可以使用如下的命令：
+
+	ssh -T git@github.com  或者  ssh -V git@github.com
+	此时，出现如下的问题：
+
+	ssh: connect to host github.com port 22: Connection timed out
+	在百度上搜“使用 ssh 连接 github 时,出现 timeout ”，找到了答案，ssh 阻塞了22端口。解决方案也很简单，修改 ssh 的配置文件。
+
+	关于修改配置，存在两种解决方法，一种是 /etc/ssh/ssh_config 中修改全局配置，一种是在用户主目录下.ssh/中添加配置文件，这里选择的后者。
+
+	cd ~/.ssh/
+	touch config
+	将如下内容添加到 config 中（当然，在全局文件中也是添加相同的内容）：
+
+		Host github.com  
+		User git  
+		Hostname ssh.github.com 
+		PreferredAuthentications publickey  
+		IdentityFile ~/.ssh/id_rsa 
+		Port 443
+	
+	https://www.cnblogs.com/sweetheartly/p/9439798.html
+	
+	
+附2：
+	登录github网站时报超时解决方法
+	选择相应快的DNS服务器添加到 C:\Windows\System32\drivers\etc\hosts 即可
+	https://blog.csdn.net/qq_30460905/article/details/80205636
+	
+附3：
+DNS检查工具：http://tool.chinaz.com/dns	
+ip归属查询：https://www.ipaddress.com/

@@ -1,0 +1,57 @@
+﻿String 转 list
+		//字符串转list<String>
+        String str = "asdfghjkl";
+        List<String> lis = Arrays.asList(str.split(""));
+		
+Integer转String 
+	//方法一:Integer类的静态方法toString()
+	Integer a = 2;
+	String str = Integer.toString(a)
+	 
+	//方法二:Integer类的成员方法toString()
+	Integer a = 2;
+	String str = a.toString();
+	 
+	//方法三:String类的静态方法valueOf()
+	Integer a = 2;
+	String str = String.valueOf(a);
+
+String转Integer
+	Integer.valueOf(str);
+	
+判断一个字符是不是数字
+	
+	工具包 判断一个字符串是不是全是数字组成
+	org.apache.commons.lang.StringUtils.isNumeric()
+	 
+	
+	// 该正则表达式可以匹配所有的数字 包括负数
+        Pattern pattern = Pattern.compile("-?[0-9]+\\.?[0-9]*");
+        String bigStr;
+		Matcher isNum = pattern.matcher(bigStr); // matcher是全匹配
+		isNum.matches()
+		
+		Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");  
+		return pattern.matcher(str).matches();
+			
+		Pattern pattern = Pattern.compile("[0-9]*");
+		return pattern.matcher(str).matches(); 
+		
+	通过BigDecimal 转化
+	String str	
+	new BigDecimal(str).toString(); 是否抛出异常 抛出就不全是数字	
+	
+	只能判断正整数
+	for (int i = str.length();--i>=0;){  
+        if (!Character.isDigit(str.charAt(i))){
+            return false;
+        }
+    }
+	
+	用ascii码
+	for(int i=str.length();--i>=0;){
+        int chr=str.charAt(i);
+        if(chr<48 || chr>57)
+            return false;
+    }
+ 
