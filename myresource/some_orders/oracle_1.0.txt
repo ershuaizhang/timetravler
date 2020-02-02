@@ -138,3 +138,5 @@ grant create view to READ_USER;
 
 --把所有表的查询权限赋给另一个用户
 grant select any table to 'QUERY';
+
+
