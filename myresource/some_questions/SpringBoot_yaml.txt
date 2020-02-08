@@ -1,0 +1,8 @@
+
+yaml、yml、 properties  配置文件的优先级
+	https://www.cnblogs.com/banml/p/12002078.html
+	
+	
+使用	
+
+https://blog.csdn.net/yzy199391/article/details/84023982
