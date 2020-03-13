@@ -57,6 +57,7 @@ Git 在window 的安装
 	第一步是用git add把文件添加进去，实际上就是把文件修改添加到暂存区；
 	第二步是用git commit提交更改，实际上就是把暂存区的所有内容提交到当前分支。
 
+
 新建代码库 类似第5步
 	# 在当前目录新建一个Git代码库
 	$ git init
@@ -70,6 +71,7 @@ Git 在window 的安装
 	# 关联远程仓库 origin 这个是默认叫法
 	$ git remote add origin [url]
 	
+	
 配置
 	# 显示当前的Git配置
 	$ git config --list
@@ -80,6 +82,7 @@ Git 在window 的安装
 	# 设置提交代码时的用户信息
 	$ git config [--global] user.name "[name]"
 	$ git config [--global] user.email "[email address]"
+	
 	
 增加/删除文件
 	# 添加指定文件到暂存区
@@ -114,6 +117,7 @@ Git 在window 的安装
 
 	# 改名文件，并且将这个改名放入暂存区
 	$ git mv [file-original] [file-renamed]
+	
 代码提交
 	# 提交暂存区到仓库区
 	$ git commit -m [message]
@@ -134,11 +138,15 @@ Git 在window 的安装
 	# 重做上一次commit，并包括指定文件的新变化
 	$ git commit --amend [file1] [file2] ...
 	
+	
+	
 代码推送
 	#第一次推送master分支时，加上了-u参数，Git不但会把本地的master分支内容推送的远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令。
 	$ git push -u origin master
 	# 不是第一次的
 	$ git push origin master
+	
+	
 分支
 	# 列出所有本地分支 当前分支前面会标一个*号。
 	$ git branch
@@ -238,6 +246,8 @@ Git 在window 的安装
 	
 	# 新建一个分支，指向某个tag
 	$ git checkout -b [branch] [tag]
+	
+	
 查看信息
 	# 显示有变更的文件
 	$ git status
@@ -321,6 +331,22 @@ Git 在window 的安装
 	$ git diff --shortstat "@{0 day ago}"
 	# 查看工作区和版本库里面最新版本的区别
 	git diff HEAD -- readme.txt
+	
+	
+	
+Git 清理无效的远程追踪分支
+	#在远程版本库创建了一个分支后，在本地可以使用  可以在本地创建远程追踪分支 
+	#但是，如果在远程版本库上删除了某一分支，该命令并不会删除本地的远程追踪分支
+	$ git remote update
+	
+	#假如你的远程版本库名是 origin,则使用如下命令先查看哪些分支需要清理：
+	$ git remote prune origin --dry-run
+	
+	#该命令可以删除本地版本库上那些失效的远程追踪分支
+	$ git remote prune
+	#执行命令，就完成了无效的远程追踪分支的清理工作
+	$ git remote prune origin
+	
 	
 	
 远程同步	
