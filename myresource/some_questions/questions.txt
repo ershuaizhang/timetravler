@@ -34,5 +34,47 @@
 	1、C:\Windows\System32目录下的java.exe,javaw.exe,javaws.exe（有就没有就算）
 	2、修改注册表regedit：HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Runtime Environment ---CurrentVersion（一般自动安装的会有，解压安装版一般不有，有就改没有就不改）
 	
+4、加速github下载
+	# GitHub begin
+	140.82.112.10 codeload.github.com
+	140.82.113.3 github.com
+	140.82.114.4 gist.github.com
+	185.199.110.153 assets-cdn.github.com
+	199.232.68.133 raw.githubusercontent.com
+	199.232.68.133 gist.githubusercontent.com
+	199.232.68.133 cloud.githubusercontent.com
+	199.232.68.133 camo.githubusercontent.com
+	199.232.69.194 github.global.ssl.fastly.net
+	199.232.68.133 avatars0.githubusercontent.com
+	199.232.68.133 avatars1.githubusercontent.com
+	199.232.68.133 avatars2.githubusercontent.com
+	199.232.68.133 avatars3.githubusercontent.com
+	199.232.68.133 avatars4.githubusercontent.com
+	199.232.68.133 avatars5.githubusercontent.com
+	199.232.68.133 avatars6.githubusercontent.com
+	199.232.68.133 avatars7.githubusercontent.com
+	199.232.68.133 avatars8.githubusercontent.com
+	140.82.114.6 api.github.com
+	140.82.114.25 live.github.com
+	185.199.110.153 http://documentcloud.github.com
+	140.82.113.9 http://nodeload.github.com
+	199.232.68.133 http://raw.github.com
+	52.205.36.92 http://status.github.com
+	140.82.112.18 http://training.github.com
+	# GitHub End
 
+	修改完hosts还不会立即生效，需要刷新DNS缓存。
+	输入指令：sudo /etc/init.d/networking restart 即可。
+	然后，关闭浏览器再访问github
+	刷新DNS的方法：
+	打开CMD
+	输入ipconfig /flushdns
 
+	https://www.ipaddress.com/    http://tool.chinaz.com/dns
+
+参考https://www.cnblogs.com/Rocky_/p/11022404.html 
+	https://blog.csdn.net/sy20173081277/article/details/82957926
+	https://www.jianshu.com/p/0493dcc15d6f
+	https://www.zhihu.com/question/276143842
+	https://blog.csdn.net/qingfengxiaosong/article/details/97250724
+	
