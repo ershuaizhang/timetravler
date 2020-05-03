@@ -524,7 +524,9 @@ https://www.cnblogs.com/cspku/articles/Git_cmds.html
 		/mtk/do.c
 		/mtk/if.h
 	
-	1、.gitignore文件的创建：首先要强调一点，这个文件的完整文件名就是“.gitignore”，注意最前面有个“.”。这样没有扩展名的文件在Windows下不太好创建，这里给出win7的创建方法：创建一个文件，文件名为：“.gitignore.”，注意前后都有一个点。保存之后系统会自动重命名为“.gitignore”。
+	1、.gitignore文件的创建：首先要强调一点，这个文件的完整文件名就是“.gitignore”，注意最前面有个“.”。
+	这样没有扩展名的文件在Windows下不太好创建，这里给出win7的创建方法：创建一个文件，文件名为：“.gitignore.”，
+	注意前后都有一个点。保存之后系统会自动重命名为“.gitignore”。
 	2、过滤规则：
 		build/ ：过滤整个文件夹；
 		*.class：过滤所有.class后缀的文件；
@@ -541,7 +543,9 @@ https://www.cnblogs.com/cspku/articles/Git_cmds.html
 
 	4、对已提交不必要文件的处理方法
 　　有时候当我们明白这个gitignore之后才发现我们已经提交不必要的文件了，而自己又是一个较完美主义者，不愿意让那些文件存在我们库里，该怎么做呢？有什么办法吗？办法肯定是有的。
-　　那么我们现在预设的问题模型是：项目文件里有一个node_modules文件，该文件是存储自动生成的模型的文件，然后我已经把这个文件提交到github库里了，现在我明白了这个道里过后想删掉它并且以后都不再提交它。处理的方法：首先，我们再终端进入项目的根文件下面，创建.gitignore文件，并且添加需要忽略提交的文件，如上面我的一个.gitignore文件，然后输入如下命令
+　　那么我们现在预设的问题模型是：项目文件里有一个node_modules文件，该文件是存储自动生成的模型的文件，然后我已经把这个文件提交到github库里了，
+	现在我明白了这个道里过后想删掉它并且以后都不再提交它。处理的方法：首先，我们再终端进入项目的根文件下面，创建.gitignore文件，并且添加需要忽略提交的文件，
+	如上面我的一个.gitignore文件，然后输入如下命令
 	git rm -r --cached node_modules（要删除的文件名）
 　　然后再
 	git push
@@ -551,6 +555,25 @@ https://www.cnblogs.com/cspku/articles/Git_cmds.html
 		比如我们在使用git和github的时候，之前没有写.gitignore文件，就上传了一些没有必要的文件，在添加了.gitignore文件后，就想删除远程仓库中的文件却想保存本地的文件。 
 		这时候不可以直接使用git rm directory，这样会删除本地仓库的文件。 
 		可以使用git rm -r –cached directory来删除缓冲，然后进行commit和push，这样会发现远程仓库中的不必要文件就被删除了，以后可以直接使用git add -A来添加修改的内容，上传的文件就会受到.gitignore文件的内容约束。
+
+	6、强制忽略已经被管理的文件
+		1、对于未加入版本控制的文件，我们可以创建.gitignore文件，忽略你想忽略的文件。
+
+		2、对于已经加入版本控制的文件，我们可以强制忽略文件
+
+		git update-index --assume-unchanged <files>
+
+		如果不小心 local.properties 文件被同事加入版本库了，更改了自己的sdk目录后，可以强制忽略这个文件
+
+		git update-index --assume-unchanged local.properties
+
+		这样，即使已经更改了文件，用git status也不会看见文件已经更改。
+
+		但在使用时需要小心，取消这种设定可以使用：
+
+		git update-index --no-assume-unchanged <files>
+		
+		https://www.jianshu.com/p/e439e940f386
 
 
 ssh Permission denied：
