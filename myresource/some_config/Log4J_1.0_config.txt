@@ -4,3 +4,49 @@ LOG4J
 工具的使用是方便的，主要的配置文件格式，需要进行配置，
 
 最好的是将日志文件加载到缓存中，之后可以在界面进行添加和修改
+
+
+
+tomcat日志 tomcat日志配置
+	在server.xml里的<host>标签下加上
+	<Valve className="org.apache.catalina.valves.AccessLogValve"
+	directory="logs" prefix="localhost_access_log." suffix=".txt"
+	pattern="common" resolveHosts="false"/>
+	className	官方文档上说了This MUST be set to org.apache.catalina.valves.AccessLogValve to use the default access log valve. &<60; 想配置访问日志？这就必须得写成这样。
+	Directory	这个东西是日志文件放置的目录，在tomcat下面有个logs文件夹，那里面是专门放置日志文件的，当然你也可以修改，我就给改成了/opt (E:\)
+	prefix	这个是日志文件的名称前缀，我的日志名称为localhost_access_log.2017-11-06.txt，前面的前缀就是这个localhost_access_log
+	suffix	这就是后缀名啦，可以改成别的
+	pattern	这个是最主要的参数了，具体的咱们下面讲，这个参数的内容比较丰富。
+	resolveHosts	如果这个值是true的话，tomcat会将这个服务器IP地址通过DNS转换为主机名，如果是false，就直接写服务器IP地址啦
+	rotatable	缺省值为true，默认的设置使得你的tomcat生成的文件命为prefix（前缀）+.+时间（一般是按天算）+.+suffix（后缀），参照我的日志名就知道了：localhost_access_log.2017-11-06.txt
+				使用这个需要谨慎，因为你将其设置为false的话，tomcat会忽略时间，不会新生成文件，最后导致你的文件超级大，这样生成的文件名就是：localhost_access_log.txt
+
+	pattern可以设置成两种方式，第一种是pattern="common"，第二种是pattern="combined",这就可以控制日志里面的格式，各位说了，pattern就这两种？common和combined又是什么意思，具体是什么格式呢？
+	咱们一点一点看，其实pattern是可以设置的，common和combined只是集成了一些显示方式，就是将显示方式给组合了，pattern的实际值有如下几种，都是后面一个字母，前面一个%百分号
+	common的值：%h %l %u %t %r %s %b
+	combined的值：%h %l %u %t %r %s %b %{Referer}i %{User-Agent}i
+	至于combined的值的最后两个：
+		%{Referer}i：从那个页面链接跳转到的此页面
+		%{User-agent}i：用户的User-Agent
+	%a	 这是记录访问者的IP，在日志里是127.0.0.1
+	%A	 这是记录本地服务器的IP，在日志里是192.168.254.108
+	%b	 这是发送信息的字节数，不涵括http头，如果字节数为0的话，显示为- 
+
+	%B	 看tomcat的解释，没看出来与b%的区别，但我这里显示为-1，没想明白，望知道者告知，我把官方解释贴出来吧 Bytes sent, excluding HTTP headers(发送的字节数，不包括HTTP头)
+	%h	远端主机名(如果resolveHost=false，远端的IP地址）
+	%H	访问者使用的协议，这里是HTTP/1.1
+	%l	 官方说这个always return '-' 官方解释：Remote logical username from identd (可能这样翻译：记录浏览者进行身份验证时提供的名字){从identd返回的远端逻辑用户名（总是返回 '-'）};
+	%m	 访问的方式，是GET还是POST，我这是GET
+	%p	 收到请求的本地端口号，这里的是80。
+	%q	查询字符串(如果存在，以 '?'开始)。 比如你访问的是aaa.jsp?bbb=ccc，那么这里就显示?bbb=ccc，明白了吧，这个q是querystring的意思
+	%r	官方解释：First line of the request (method and request URI)——请求的第一行，包含了请求的方法和URI
+	%s	 这个是响应http的状态码，这里返回的是304，咱们经常看见访问某个网页报错误500什么的，那也会返回500
+	%S	 用户的session ID,这个session ID大家可以另外查一下详细的解释，反正每次都会生成不同的session ID
+	%t	 日志和时间，使用通常的Log格式
+	%u	认证以后的远端用户（如果存在的话，否则为'-'） 
+	%U	 请求访问的URL地址，我这里是/seces/commonService?wsdl
+	%v	 本地服务器名称，可能就是你url里面写的那个吧，我这里是localhost
+	%D	 官方解释：Time taken to process the request, in millis，处理请求的时间，以毫秒为单位
+	%T	 官方解释：Time taken to process the request, in seconds，处理请求的时间，以秒为单位
+
+

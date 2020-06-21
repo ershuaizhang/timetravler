@@ -1,0 +1,5 @@
+﻿1、springmvc+fastjson返回页面出现乱码问题
+	在controller里面的接口上面加,produces="text/html;charset=UTF-8"即可
+	@RequestMapping(value = "/addLjlUsrServiceManInfoOne" ,produces="text/html;charset=UTF-8")
+	
+	

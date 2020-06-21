@@ -1,0 +1,58 @@
+JS——JavaScript
+是一个脚本编辑语言，是一个动态语言
+这里JS  唯一的缺点是不能独立的存在。必须依赖HTML或者是其他的进行页面渲染的
+
+事件：
+	鼠标点击事件
+		click事件
+		change事件
+		select事件
+		focus事件
+		load事件
+		鼠标移动事件 onMouseover /onMeuseout 
+		onblur事件
+	键盘事件
+	UI事件
+	表单事件
+	加载和错误事件
+
+函数和对象：
+	没有直接返回值的函数：
+	function  funName(){
+	};
+	有返回值的函数：
+	function funName (){
+			return ‘’;
+	};
+	内置对象：
+	浏览器对象(navigator)：提供有关浏览器的相关信息
+		appName：浏览器的名称
+		appVersion：浏览器的版本
+		appCodeName：浏览器的代码名称
+		browserLanguage：浏览器使用的语言
+		plugins：可以使用的插件信息
+		platform：浏览器系统使用的平台
+		cookieEnabled：浏览的cookie功能是不是已经打开
+	文档对象(document)：对象包含了与文档元素一起工作的对象
+
+	窗口对象(windows)：
+		open(url,windowName,parameterlist);	创建一个新的窗口
+		close		关闭一个窗口
+		。。。。。。
+	位置对象(location)：
+		protocol 返回地址的协议
+		hostname：返回地址的主机名
+		port：返回地址端口
+		host：返回主机名和端口号
+		href：返回整个地址
+		search：
+	历史对象(history)：
+
+	内置对象：
+		Date();
+		Math();
+		string();
+		array();
+
+
+

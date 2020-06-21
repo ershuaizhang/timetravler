@@ -1,0 +1,54 @@
+Git使用中会出现的问题
+
+1、ssh Permission denied：
+
+	先看本地是否有ssh文件
+	有则把公钥加到github
+	如果以上操作问题还不能解决,并且执行 ssh -T git@github.com 出现如下提示 说明本地公钥没有问题
+		ssh -T git@github.com
+		Hi youcanping! You've successfully authenticated, but GitHub does not provide shell access.
+	
+	看本地的.git/config设置的仓库url地址和github使用的链接地址是否一致  不一致要修改
+		> cat .git/config
+		[core]
+		repositoryformatversion = 0
+		filemode = true
+		bare = false
+		logallrefupdates = true
+		ignorecase = true
+		precomposeunicode = true
+		[remote "origin"]
+		url = 应该配置的
+		fetch = +refs/heads/*:refs/remotes/origin/*
+		[branch "master"]
+		remote = origin
+		merge = refs/heads/master
+		
+2、使用命名或者工具和github网站交互时一直超时22 的解决方法
+	测试 Github 连接是否畅通，可以使用如下的命令：
+
+	ssh -T git@github.com  或者  ssh -V git@github.com
+	此时，出现如下的问题：
+
+	ssh: connect to host github.com port 22: Connection timed out
+	在百度上搜“使用 ssh 连接 github 时,出现 timeout ”，找到了答案，ssh 阻塞了22端口。解决方案也很简单，修改 ssh 的配置文件。
+
+	关于修改配置，存在两种解决方法，一种是 /etc/ssh/ssh_config 中修改全局配置，一种是在用户主目录下.ssh/中添加配置文件，这里选择的后者。
+
+	cd ~/.ssh/
+	touch config
+	将如下内容添加到 config 中（当然，在全局文件中也是添加相同的内容）：
+		Host github.com  
+		User git  
+		Hostname ssh.github.com 
+		PreferredAuthentications publickey  
+		IdentityFile ~/.ssh/id_rsa 
+		Port 443
+	
+	https://www.cnblogs.com/sweetheartly/p/9439798.html
+	
+	
+3、登录github网站时报超时解决方法
+	选择相应快的DNS服务器添加到 C:\Windows\System32\drivers\etc\hosts 即可
+	https://blog.csdn.net/qq_30460905/article/details/80205636
+			
