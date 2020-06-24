@@ -1,0 +1,9 @@
+﻿1、修改配置文件zoo_sample.cfg
+	一般是复制一个命名为zoo.cfg 先在原有的基础上 添加或者修改数据目录dataDir、日志目录dataLogDir 
+	
+2、启动zk
+	双击执行服务端启动命令：zkServer.cmd
+	双击执行客户端启动命令：zkCli.cmd
+	
+	
+	

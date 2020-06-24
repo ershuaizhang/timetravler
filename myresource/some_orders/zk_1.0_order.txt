@@ -1,0 +1,10 @@
+﻿
+1、 节点
+	有序节点， 持久节点，临时节点
+	
+	创建节点
+	create /nodeName
+	删除节点
+	delete /nodeName
+	查看节点的状态
+	stat /nodeName

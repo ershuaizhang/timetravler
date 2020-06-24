@@ -1,0 +1,8 @@
+﻿1、如何添加Watch
+	一、向客户端的构造方法中传递地阐述
+		new ZooKeeper(String connectString, int sessionTimeout, Watcher watcher)
+		connectString 服务端地址
+		sessionTimeout：超时时间
+		Watcher：监控事件
+	二、客户端通过getData、exists、getChildren 接口来向服务器注册Watcher
+		getData(String path, Watcher watcher, Stat stat)

@@ -1,4 +1,4 @@
---´´½¨±í¿Õ¼äºÍÁÙÊ±±í¿Õ¼ä
+ï»¿--åˆ›å»ºè¡¨ç©ºé—´å’Œä¸´æ—¶è¡¨ç©ºé—´
 create tablespace TIMETRAVEL_USER datafile 'D:\APP\ADMINISTRATOR\ORADATA\ORCL\TIMETRAVEL_USER.DBF' 
 size 200m
 autoextend on
@@ -6,116 +6,116 @@ next 32m maxsize 2048m;
 
 create temporary tablespace TIMETRAVEL_TEMP tempfile 'D:\APP\ADMINISTRATOR\ORADATA\ORCL\TIMETRAVEL_TEMP.DBF' size 50M autoextend ON next 10M maxsize 100M; 
 
---oracleÔõÃ´²é¿´ÓÃ»§ÊôÓÚÄÄ¸ö±í¿Õ¼ä ÓÃÈçÏÂÓï¾ä²é¿´£º
+--oracleæ€ä¹ˆæŸ¥çœ‹ç”¨æˆ·å±äºå“ªä¸ªè¡¨ç©ºé—´ ç”¨å¦‚ä¸‹è¯­å¥æŸ¥çœ‹ï¼š
 
-select username,default_tablespace from dba_users  where username='ÓÃ»§Ãû';
+select username,default_tablespace from dba_users  where username='ç”¨æˆ·å';
 
---²éÑ¯¸ÅÒªÎÄ¼şĞÅÏ¢£º select * from SYS.DBA_PROFILES;
+--æŸ¥è¯¢æ¦‚è¦æ–‡ä»¶ä¿¡æ¯ï¼š select * from SYS.DBA_PROFILES;
 
 select * from SYS.DBA_PROFILES where profile='DEFAULT';
 
 
---oracleµÄÏµÍ³ºÍ¶ÔÏóÈ¨ÏŞÁĞ±í 
-alter any cluster ĞŞ¸ÄÈÎÒâ´ØµÄÈ¨ÏŞ
-alter any index ĞŞ¸ÄÈÎÒâË÷ÒıµÄÈ¨ÏŞ
-alter any role ĞŞ¸ÄÈÎÒâ½ÇÉ«µÄÈ¨ÏŞ
-alter any sequence ĞŞ¸ÄÈÎÒâĞòÁĞµÄÈ¨ÏŞ
-alter any snapshot ĞŞ¸ÄÈÎÒâ¿ìÕÕµÄÈ¨ÏŞ
-alter any table ĞŞ¸ÄÈÎÒâ±íµÄÈ¨ÏŞ
-alter any trigger ĞŞ¸ÄÈÎÒâ´¥·¢Æ÷µÄÈ¨ÏŞ
-alter cluster ĞŞ¸ÄÓµÓĞ´ØµÄÈ¨ÏŞ
-alter database ĞŞ¸ÄÊı¾İ¿âµÄÈ¨ÏŞ
-alter procedure ĞŞ¸ÄÓµÓĞµÄ´æ´¢¹ı³ÌÈ¨ÏŞ
-alter profile ĞŞ¸Ä×ÊÔ´ÏŞÖÆ¼ò±íµÄÈ¨ÏŞ
-alter resource cost ÉèÖÃ¼Ñ»°×ÊÔ´¿ªÏúµÄÈ¨ÏŞ
-alter rollback segment ĞŞ¸Ä»Ø¹ö¶ÎµÄÈ¨ÏŞ
-alter sequence ĞŞ¸ÄÓµÓĞµÄĞòÁĞÈ¨ÏŞ
-alter session ĞŞ¸ÄÊı¾İ¿â»á»°µÄÈ¨ÏŞ
-alter sytem ĞŞ¸ÄÊı¾İ¿â·şÎñÆ÷ÉèÖÃµÄÈ¨ÏŞ
-alter table ĞŞ¸ÄÓµÓĞµÄ±íÈ¨ÏŞ
-alter tablespace ĞŞ¸Ä±í¿Õ¼äµÄÈ¨ÏŞ
-alter user ĞŞ¸ÄÓÃ»§µÄÈ¨ÏŞ
-analyze Ê¹ÓÃanalyzeÃüÁî·ÖÎöÊı¾İ¿âÖĞÈÎÒâµÄ±í¡¢Ë÷ÒıºÍ´Ø
-audit any ÎªÈÎÒâµÄÊı¾İ¿â¶ÔÏóÉèÖÃÉó¼ÆÑ¡Ïî
-audit system ÔÊĞíÏµÍ³²Ù×÷Éó¼Æ
-backup any table ±¸·İÈÎÒâ±íµÄÈ¨ÏŞ
-become user ÇĞ»»ÓÃ»§×´Ì¬µÄÈ¨ÏŞ
-commit any table Ìá½»±íµÄÈ¨ÏŞ
-create any cluster ÎªÈÎÒâÓÃ»§´´½¨´ØµÄÈ¨ÏŞ
-create any index ÎªÈÎÒâÓÃ»§´´½¨Ë÷ÒıµÄÈ¨ÏŞ
-create any procedure ÎªÈÎÒâÓÃ»§´´½¨´æ´¢¹ı³ÌµÄÈ¨ÏŞ
-create any sequence ÎªÈÎÒâÓÃ»§´´½¨ĞòÁĞµÄÈ¨ÏŞ
-create any snapshot ÎªÈÎÒâÓÃ»§´´½¨¿ìÕÕµÄÈ¨ÏŞ
-create any synonym ÎªÈÎÒâÓÃ»§´´½¨Í¬ÒåÃûµÄÈ¨ÏŞ
-create any table ÎªÈÎÒâÓÃ»§´´½¨±íµÄÈ¨ÏŞ
-create any trigger ÎªÈÎÒâÓÃ»§´´½¨´¥·¢Æ÷µÄÈ¨ÏŞ
-create any view ÎªÈÎÒâÓÃ»§´´½¨ÊÓÍ¼µÄÈ¨ÏŞ
-create cluster ÎªÓÃ»§´´½¨´ØµÄÈ¨ÏŞ
-create database link ÎªÓÃ»§´´½¨µÄÈ¨ÏŞ
-create procedure ÎªÓÃ»§´´½¨´æ´¢¹ı³ÌµÄÈ¨ÏŞ
-create profile ´´½¨×ÊÔ´ÏŞÖÆ¼ò±íµÄÈ¨ÏŞ
-create public database link ´´½¨¹«¹²Êı¾İ¿âÁ´Â·µÄÈ¨ÏŞ
-create public synonym ´´½¨¹«¹²Í¬ÒåÃûµÄÈ¨ÏŞ
-create role ´´½¨½ÇÉ«µÄÈ¨ÏŞ
-create rollback segment ´´½¨»Ø¹ö¶ÎµÄÈ¨ÏŞ
-create session ´´½¨»á»°µÄÈ¨ÏŞ
-create sequence ÎªÓÃ»§´´½¨ĞòÁĞµÄÈ¨ÏŞ
-create snapshot ÎªÓÃ»§´´½¨¿ìÕÕµÄÈ¨ÏŞ
-create synonym ÎªÓÃ»§´´½¨Í¬ÒåÃûµÄÈ¨ÏŞ
-create table ÎªÓÃ»§´´½¨±íµÄÈ¨ÏŞ
-create tablespace ´´½¨±í¿Õ¼äµÄÈ¨ÏŞ
-create user ´´½¨ÓÃ»§µÄÈ¨ÏŞ
-create view ÎªÓÃ»§´´½¨ÊÓÍ¼µÄÈ¨ÏŞ
-delete any table É¾³ıÈÎÒâ±íĞĞµÄÈ¨ÏŞ
-delete any view É¾³ıÈÎÒâÊÓÍ¼ĞĞµÄÈ¨ÏŞ
-delete snapshot É¾³ı¿ìÕÕÖĞĞĞµÄÈ¨ÏŞ
-delete table ÎªÓÃ»§É¾³ı±íĞĞµÄÈ¨ÏŞ
-delete view ÎªÓÃ»§É¾³ıÊÓÍ¼ĞĞµÄÈ¨ÏŞ
-drop any cluster É¾³ıÈÎÒâ´ØµÄÈ¨ÏŞ
-drop any index É¾³ıÈÎÒâË÷ÒıµÄÈ¨ÏŞ
-drop any procedure É¾³ıÈÎÒâ´æ´¢¹ı³ÌµÄÈ¨ÏŞ
-drop any role É¾³ıÈÎÒâ½ÇÉ«µÄÈ¨ÏŞ
-drop any sequence É¾³ıÈÎÒâĞòÁĞµÄÈ¨ÏŞ
-drop any snapshot É¾³ıÈÎÒâ¿ìÕÕµÄÈ¨ÏŞ
-drop any synonym É¾³ıÈÎÒâÍ¬ÒåÃûµÄÈ¨ÏŞ
-drop any table É¾³ıÈÎÒâ±íµÄÈ¨ÏŞ
-drop any trigger É¾³ıÈÎÒâ´¥·¢Æ÷µÄÈ¨ÏŞ
-drop any view É¾³ıÈÎÒâÊÓÍ¼µÄÈ¨ÏŞ
-drop profile É¾³ı×ÊÔ´ÏŞÖÆ¼ò±íµÄÈ¨ÏŞ
-drop public cluster É¾³ı¹«¹²´ØµÄÈ¨ÏŞ
-drop public database link É¾³ı¹«¹²Êı¾İÁ´Â·µÄÈ¨ÏŞ
-drop public synonym É¾³ı¹«¹²Í¬ÒåÃûµÄÈ¨ÏŞ
-drop rollback segment É¾³ı»Ø¹ö¶ÎµÄÈ¨ÏŞ
-drop tablespace É¾³ı±í¿Õ¼äµÄÈ¨ÏŞ
-drop user É¾³ıÓÃ»§µÄÈ¨ÏŞ
-execute any procedure Ö´ĞĞÈÎÒâ´æ´¢¹ı³ÌµÄÈ¨ÏŞ
-execute function Ö´ĞĞ´æ´¢º¯ÊıµÄÈ¨ÏŞ
-execute package Ö´ĞĞ´æ´¢°üµÄÈ¨ÏŞ
-execute procedure Ö´ĞĞÓÃ»§´æ´¢¹ı³ÌµÄÈ¨ÏŞ
-force any transaction ¹ÜÀíÎ´Ìá½»µÄÈÎÒâÊÂÎñµÄÊä³öÈ¨ÏŞ
-force transaction ¹ÜÀíÎ´Ìá½»µÄÓÃ»§ÊÂÎñµÄÊä³öÈ¨ÏŞ
-grant any privilege ÊÚÓèÈÎÒâÏµÍ³ÌØÈ¨µÄÈ¨ÏŞ
-grant any role ÊÚÓèÈÎÒâ½ÇÉ«µÄÈ¨ÏŞ
-index table ¸ø±í¼ÓË÷ÒıµÄÈ¨ÏŞ
-insert any table ÏòÈÎÒâ±íÖĞ²åÈëĞĞµÄÈ¨ÏŞ
-insert snapshot Ïò¿ìÕÕÖĞ²åÈëĞĞµÄÈ¨ÏŞ
-insert table ÏòÓÃ»§±íÖĞ²åÈëĞĞµÄÈ¨ÏŞ
-insert view ÏòÓÃ»§ÊÓÍ¼ÖĞ²åĞĞµÄÈ¨ÏŞ
-lock any table ¸øÈÎÒâ±í¼ÓËøµÄÈ¨ÏŞ
-manager tablespace ¹ÜÀí£¨±¸·İ¿ÉÓÃĞÔ£©±í¿Õ¼äµÄÈ¨ÏŞ
-references table ²Î¿¼±íµÄÈ¨ÏŞ
-restricted session ´´½¨ÓĞÏŞÖÆµÄÊı¾İ¿â»á»°µÄÈ¨ÏŞ
-select any sequence Ê¹ÓÃÈÎÒâĞòÁĞµÄÈ¨ÏŞ
-select any table Ê¹ÓÃÈÎÒâ±íµÄÈ¨ÏŞ
-select snapshot Ê¹ÓÃ¿ìÕÕµÄÈ¨ÏŞ
-select sequence Ê¹ÓÃÓÃ»§ĞòÁĞµÄÈ¨ÏŞ
-select table Ê¹ÓÃÓÃ»§±íµÄÈ¨ÏŞ
-select view Ê¹ÓÃÊÓÍ¼µÄÈ¨ÏŞ
-unlimited tablespace ¶Ô±í¿Õ¼ä´óĞ¡²»¼ÓÏŞÖÆµÄÈ¨ÏŞ
-update any table ĞŞ¸ÄÈÎÒâ±íÖĞĞĞµÄÈ¨ÏŞ
-update snapshot ĞŞ¸Ä¿ìÕÕÖĞĞĞµÄÈ¨ÏŞ
-update table ĞŞ¸ÄÓÃ»§±íÖĞµÄĞĞµÄÈ¨ÏŞ
-update view ĞŞ¸ÄÊÓÍ¼ÖĞĞĞµÄÈ¨ÏŞ
+--oracleçš„ç³»ç»Ÿå’Œå¯¹è±¡æƒé™åˆ—è¡¨ 
+alter any cluster ä¿®æ”¹ä»»æ„ç°‡çš„æƒé™
+alter any index ä¿®æ”¹ä»»æ„ç´¢å¼•çš„æƒé™
+alter any role ä¿®æ”¹ä»»æ„è§’è‰²çš„æƒé™
+alter any sequence ä¿®æ”¹ä»»æ„åºåˆ—çš„æƒé™
+alter any snapshot ä¿®æ”¹ä»»æ„å¿«ç…§çš„æƒé™
+alter any table ä¿®æ”¹ä»»æ„è¡¨çš„æƒé™
+alter any trigger ä¿®æ”¹ä»»æ„è§¦å‘å™¨çš„æƒé™
+alter cluster ä¿®æ”¹æ‹¥æœ‰ç°‡çš„æƒé™
+alter database ä¿®æ”¹æ•°æ®åº“çš„æƒé™
+alter procedure ä¿®æ”¹æ‹¥æœ‰çš„å­˜å‚¨è¿‡ç¨‹æƒé™
+alter profile ä¿®æ”¹èµ„æºé™åˆ¶ç®€è¡¨çš„æƒé™
+alter resource cost è®¾ç½®ä½³è¯èµ„æºå¼€é”€çš„æƒé™
+alter rollback segment ä¿®æ”¹å›æ»šæ®µçš„æƒé™
+alter sequence ä¿®æ”¹æ‹¥æœ‰çš„åºåˆ—æƒé™
+alter session ä¿®æ”¹æ•°æ®åº“ä¼šè¯çš„æƒé™
+alter sytem ä¿®æ”¹æ•°æ®åº“æœåŠ¡å™¨è®¾ç½®çš„æƒé™
+alter table ä¿®æ”¹æ‹¥æœ‰çš„è¡¨æƒé™
+alter tablespace ä¿®æ”¹è¡¨ç©ºé—´çš„æƒé™
+alter user ä¿®æ”¹ç”¨æˆ·çš„æƒé™
+analyze ä½¿ç”¨analyzeå‘½ä»¤åˆ†ææ•°æ®åº“ä¸­ä»»æ„çš„è¡¨ã€ç´¢å¼•å’Œç°‡
+audit any ä¸ºä»»æ„çš„æ•°æ®åº“å¯¹è±¡è®¾ç½®å®¡è®¡é€‰é¡¹
+audit system å…è®¸ç³»ç»Ÿæ“ä½œå®¡è®¡
+backup any table å¤‡ä»½ä»»æ„è¡¨çš„æƒé™
+become user åˆ‡æ¢ç”¨æˆ·çŠ¶æ€çš„æƒé™
+commit any table æäº¤è¡¨çš„æƒé™
+create any cluster ä¸ºä»»æ„ç”¨æˆ·åˆ›å»ºç°‡çš„æƒé™
+create any index ä¸ºä»»æ„ç”¨æˆ·åˆ›å»ºç´¢å¼•çš„æƒé™
+create any procedure ä¸ºä»»æ„ç”¨æˆ·åˆ›å»ºå­˜å‚¨è¿‡ç¨‹çš„æƒé™
+create any sequence ä¸ºä»»æ„ç”¨æˆ·åˆ›å»ºåºåˆ—çš„æƒé™
+create any snapshot ä¸ºä»»æ„ç”¨æˆ·åˆ›å»ºå¿«ç…§çš„æƒé™
+create any synonym ä¸ºä»»æ„ç”¨æˆ·åˆ›å»ºåŒä¹‰åçš„æƒé™
+create any table ä¸ºä»»æ„ç”¨æˆ·åˆ›å»ºè¡¨çš„æƒé™
+create any trigger ä¸ºä»»æ„ç”¨æˆ·åˆ›å»ºè§¦å‘å™¨çš„æƒé™
+create any view ä¸ºä»»æ„ç”¨æˆ·åˆ›å»ºè§†å›¾çš„æƒé™
+create cluster ä¸ºç”¨æˆ·åˆ›å»ºç°‡çš„æƒé™
+create database link ä¸ºç”¨æˆ·åˆ›å»ºçš„æƒé™
+create procedure ä¸ºç”¨æˆ·åˆ›å»ºå­˜å‚¨è¿‡ç¨‹çš„æƒé™
+create profile åˆ›å»ºèµ„æºé™åˆ¶ç®€è¡¨çš„æƒé™
+create public database link åˆ›å»ºå…¬å…±æ•°æ®åº“é“¾è·¯çš„æƒé™
+create public synonym åˆ›å»ºå…¬å…±åŒä¹‰åçš„æƒé™
+create role åˆ›å»ºè§’è‰²çš„æƒé™
+create rollback segment åˆ›å»ºå›æ»šæ®µçš„æƒé™
+create session åˆ›å»ºä¼šè¯çš„æƒé™
+create sequence ä¸ºç”¨æˆ·åˆ›å»ºåºåˆ—çš„æƒé™
+create snapshot ä¸ºç”¨æˆ·åˆ›å»ºå¿«ç…§çš„æƒé™
+create synonym ä¸ºç”¨æˆ·åˆ›å»ºåŒä¹‰åçš„æƒé™
+create table ä¸ºç”¨æˆ·åˆ›å»ºè¡¨çš„æƒé™
+create tablespace åˆ›å»ºè¡¨ç©ºé—´çš„æƒé™
+create user åˆ›å»ºç”¨æˆ·çš„æƒé™
+create view ä¸ºç”¨æˆ·åˆ›å»ºè§†å›¾çš„æƒé™
+delete any table åˆ é™¤ä»»æ„è¡¨è¡Œçš„æƒé™
+delete any view åˆ é™¤ä»»æ„è§†å›¾è¡Œçš„æƒé™
+delete snapshot åˆ é™¤å¿«ç…§ä¸­è¡Œçš„æƒé™
+delete table ä¸ºç”¨æˆ·åˆ é™¤è¡¨è¡Œçš„æƒé™
+delete view ä¸ºç”¨æˆ·åˆ é™¤è§†å›¾è¡Œçš„æƒé™
+drop any cluster åˆ é™¤ä»»æ„ç°‡çš„æƒé™
+drop any index åˆ é™¤ä»»æ„ç´¢å¼•çš„æƒé™
+drop any procedure åˆ é™¤ä»»æ„å­˜å‚¨è¿‡ç¨‹çš„æƒé™
+drop any role åˆ é™¤ä»»æ„è§’è‰²çš„æƒé™
+drop any sequence åˆ é™¤ä»»æ„åºåˆ—çš„æƒé™
+drop any snapshot åˆ é™¤ä»»æ„å¿«ç…§çš„æƒé™
+drop any synonym åˆ é™¤ä»»æ„åŒä¹‰åçš„æƒé™
+drop any table åˆ é™¤ä»»æ„è¡¨çš„æƒé™
+drop any trigger åˆ é™¤ä»»æ„è§¦å‘å™¨çš„æƒé™
+drop any view åˆ é™¤ä»»æ„è§†å›¾çš„æƒé™
+drop profile åˆ é™¤èµ„æºé™åˆ¶ç®€è¡¨çš„æƒé™
+drop public cluster åˆ é™¤å…¬å…±ç°‡çš„æƒé™
+drop public database link åˆ é™¤å…¬å…±æ•°æ®é“¾è·¯çš„æƒé™
+drop public synonym åˆ é™¤å…¬å…±åŒä¹‰åçš„æƒé™
+drop rollback segment åˆ é™¤å›æ»šæ®µçš„æƒé™
+drop tablespace åˆ é™¤è¡¨ç©ºé—´çš„æƒé™
+drop user åˆ é™¤ç”¨æˆ·çš„æƒé™
+execute any procedure æ‰§è¡Œä»»æ„å­˜å‚¨è¿‡ç¨‹çš„æƒé™
+execute function æ‰§è¡Œå­˜å‚¨å‡½æ•°çš„æƒé™
+execute package æ‰§è¡Œå­˜å‚¨åŒ…çš„æƒé™
+execute procedure æ‰§è¡Œç”¨æˆ·å­˜å‚¨è¿‡ç¨‹çš„æƒé™
+force any transaction ç®¡ç†æœªæäº¤çš„ä»»æ„äº‹åŠ¡çš„è¾“å‡ºæƒé™
+force transaction ç®¡ç†æœªæäº¤çš„ç”¨æˆ·äº‹åŠ¡çš„è¾“å‡ºæƒé™
+grant any privilege æˆäºˆä»»æ„ç³»ç»Ÿç‰¹æƒçš„æƒé™
+grant any role æˆäºˆä»»æ„è§’è‰²çš„æƒé™
+index table ç»™è¡¨åŠ ç´¢å¼•çš„æƒé™
+insert any table å‘ä»»æ„è¡¨ä¸­æ’å…¥è¡Œçš„æƒé™
+insert snapshot å‘å¿«ç…§ä¸­æ’å…¥è¡Œçš„æƒé™
+insert table å‘ç”¨æˆ·è¡¨ä¸­æ’å…¥è¡Œçš„æƒé™
+insert view å‘ç”¨æˆ·è§†å›¾ä¸­æ’è¡Œçš„æƒé™
+lock any table ç»™ä»»æ„è¡¨åŠ é”çš„æƒé™
+manager tablespace ç®¡ç†ï¼ˆå¤‡ä»½å¯ç”¨æ€§ï¼‰è¡¨ç©ºé—´çš„æƒé™
+references table å‚è€ƒè¡¨çš„æƒé™
+restricted session åˆ›å»ºæœ‰é™åˆ¶çš„æ•°æ®åº“ä¼šè¯çš„æƒé™
+select any sequence ä½¿ç”¨ä»»æ„åºåˆ—çš„æƒé™
+select any table ä½¿ç”¨ä»»æ„è¡¨çš„æƒé™
+select snapshot ä½¿ç”¨å¿«ç…§çš„æƒé™
+select sequence ä½¿ç”¨ç”¨æˆ·åºåˆ—çš„æƒé™
+select table ä½¿ç”¨ç”¨æˆ·è¡¨çš„æƒé™
+select view ä½¿ç”¨è§†å›¾çš„æƒé™
+unlimited tablespace å¯¹è¡¨ç©ºé—´å¤§å°ä¸åŠ é™åˆ¶çš„æƒé™
+update any table ä¿®æ”¹ä»»æ„è¡¨ä¸­è¡Œçš„æƒé™
+update snapshot ä¿®æ”¹å¿«ç…§ä¸­è¡Œçš„æƒé™
+update table ä¿®æ”¹ç”¨æˆ·è¡¨ä¸­çš„è¡Œçš„æƒé™
+update view ä¿®æ”¹è§†å›¾ä¸­è¡Œçš„æƒé™
 
 
 
@@ -136,7 +136,7 @@ grant create synonym to READ_USER;
 grant create table to READ_USER;
 grant create view to READ_USER;
 
---°ÑËùÓĞ±íµÄ²éÑ¯È¨ÏŞ¸³¸øÁíÒ»¸öÓÃ»§
+--æŠŠæ‰€æœ‰è¡¨çš„æŸ¥è¯¢æƒé™èµ‹ç»™å¦ä¸€ä¸ªç”¨æˆ·
 grant select any table to 'QUERY';
 
 
