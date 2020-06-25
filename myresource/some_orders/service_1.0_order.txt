@@ -1,23 +1,7 @@
-﻿Apache
-	apache
-	Apache的特点是简单、高速、性能稳定，可作代理服务器使用
-	Apache是以进程为基础的结构，要比线程消耗更多的系统开支，不太适合于多处理器环境，还有就是并发不强，流量大了就容易出现500错误
-Tomcat
+﻿Tomcat
 	查看tomcat版
 		1、打开dos命令（windows键+r，输入cmd）
 		2、进入tomcat的bin目录，例如 cd F:\tools\apache-tomcat-8.5.37\bin，再输入f: 回车
 		3、输入catalina version 回车
 		4、完成。
 		architecture的后面，x86就是32位，amd64就是64位
-
-
-	基于Java的Web应用软件容器,不过Tomcat处理静态HTML的能力不如Apache服务器
-Nginx
-	Nginx是一种高性能的HTTP和反向代理web服务器，支持高并发和负载均衡，以稳定性、丰富的功能集
-	在连接高并发的情况下，Nginx是Apache服务不错的替代品。同时Nginx的模块也非常丰富，能够满足不同的需求，适合做静态使用
-jboss
-	
-WebSphere
-
-WebLogic
-
