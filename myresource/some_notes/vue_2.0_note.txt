@@ -1,0 +1,321 @@
+﻿	语法：
+1、
+
+2、模板语法
+
+3、条件语句
+	v-if
+	v-else-if 
+	v-else
+	
+	v-show
+
+4、循环语句
+	v-for 	这个既可以遍历 对象集合 也可以遍历的对象的属性
+
+5、计算属性 是不是进行变化 是基于缓存的数据是不是发生了变化
+	实例化对象时 使用计算属性关键字 computed (默认值只有get的方法，若是set需要则可以定义)
+	
+6、监听属性
+	watch
+	
+7、样式绑定  支持对象 数组  三目运算
+	v-bind:class=""
+	直挂样式
+	<div v-bind:class="{ active: isActive }"></div>
+	<div v-bind:class="classObject"></div>
+	<div class="static" v-bind:class="{ active: isActive, 'text-danger': hasError }"></div>
+	<div v-bind:class="[activeClass, errorClass]"></div>
+	<div v-bind:class="[errorClass ,isActive ? activeClass : '']"></div>
+	内联样式
+    <div v-bind:style="{ color: activeColor, fontSize: fontSize + 'px' }">菜鸟教程</div>
+
+8、事件处理
+	监听事件 v-on
+	click 点击事件
+	keyup 键盘事件
+	
+	通过修饰符 响应事件
+	
+9、表单
+	通过 v-model 实现数据的双向绑定
+	
+10、组件   https://cn.vuejs.org/v2/guide/components-dynamic-async.html
+	组件命名 两种格式  kebab-case    PascalCase
+	
+	
+	全局组件注册  所有实例都能用全局组件。
+		Vue.component(tagName, options)
+
+	局部注册 关键字components
+		在实例中进行注册
+		<div id="app">
+			<runoob></runoob>
+		</div>
+		 
+		<script>
+		var Child = {
+		  template: '<h1>自定义组件!</h1>'
+		}
+		 
+		// 创建根实例
+		new Vue({
+		  el: '#app',
+		  components: {
+			// <runoob> 将只在父模板可用
+			'runoob': Child
+		  }
+		})
+		</script>
+	组件传值 关键字 props
+		是子组件用来接受父组件传递过来的数据的一个自定义属性
+		父组件的数据需要通过 props 把数据传给子组件，子组件需要显式地用 props 选项声明 "prop"：
+		
+		父传子 props
+		子传父 
+			子组件发事件 	使用 $emit(eventName) 触发事件 
+			父组件响应事件	使用 $on(eventName) 监听事件
+	住件中的data不是一个对象而是一个方法
+		若不是方法 则 多个应用时 会出现重复的情况
+		若是方法 则不管多个引用时 现象都是不各自独立的
+
+		
+11、自定义指令 directive
+	全局指令注册
+		<div id="app">
+			<div v-runoob="{ color: 'green', text: '菜鸟教程!' }"></div>
+		</div>
+		 
+		<script>
+		Vue.directive('runoob', function (el, binding) {
+			// 简写方式设置文本及背景颜色
+			el.innerHTML = binding.value.text
+			el.style.backgroundColor = binding.value.color
+		})
+		new Vue({
+		  el: '#app'
+		})
+		</script>
+	局部指令注册
+		// 创建根实例
+		new Vue({
+		  el: '#app',
+		  directives: {
+			// 注册一个局部的自定义指令 v-focus
+			focus: {
+			  // 指令的定义
+			  inserted: function (el) {
+				// 聚焦元素
+				el.focus()
+			  }
+			}
+		  }
+		})
+	
+12、路由
+	<router-link> 是一个组件，该组件用于设置一个导航链接，切换不同 HTML 内容。 to 属性为目标地址， 即要显示的内容
+	<router-link> 相关属性
+		to
+			表示目标路由的链接。 当被点击后，内部会立刻把 to 的值传到 router.push()
+		replace
+			设置 replace 属性的话，当点击时，会调用 router.replace() 而不是 router.push()，导航后不会留下 history 记录	
+		append
+			设置 append 属性后，则在当前 (相对) 路径前添加其路径。
+			例如，我们从 /a 导航到一个相对路径 b，如果没有配置 append，则路径为 /b，如果配了，则为 /a/b	
+		tag
+			有时候想要 <router-link> 渲染成某种标签，例如 <li>
+		active-class
+			设置 链接激活时使用的 CSS 类名
+		exact-active-class
+			配置当链接被精确匹配的时候应该激活的 class。
+		event
+			声明可以用来触发导航的事件。可以是一个字符串或是一个包含字符串的数组
+	demo:
+		<html>
+		<head>
+		<meta charset="utf-8">
+		<title>Vue 测试实例 - 菜鸟教程(runoob.com)</title>
+		<script src="https://cdn.staticfile.org/vue/2.4.2/vue.min.js"></script>
+		<script src="https://cdn.staticfile.org/vue-router/2.7.0/vue-router.min.js"></script>
+		</head>
+		<body>
+		<div id="app">
+		  <h1>Hello App!</h1>
+		  <p>
+			<!-- 使用 router-link 组件来导航. -->
+			<!-- 通过传入 `to` 属性指定链接. -->
+			<!-- <router-link> 默认会被渲染成一个 `<a>` 标签 -->
+			<router-link to="/foo">Go to Foo</router-link>
+			<router-link to="/bar">Go to Bar</router-link>
+		  </p>
+		  <!-- 路由出口 -->
+		  <!-- 路由匹配到的组件将渲染在这里 -->
+		  <router-view></router-view>
+		</div>
+		<script>
+		// 0. 如果使用模块化机制编程，導入Vue和VueRouter，要调用 Vue.use(VueRouter)
+		// 1. 定义（路由）组件。
+		// 可以从其他文件 import 进来
+		const Foo = { template: '<div>foo</div>' }
+		const Bar = { template: '<div>bar</div>' }
+		// 2. 定义路由
+		// 每个路由应该映射一个组件。 其中"component" 可以是
+		// 通过 Vue.extend() 创建的组件构造器，
+		// 或者，只是一个组件配置对象。
+		// 我们晚点再讨论嵌套路由。
+		const routes = [
+		  { path: '/foo', component: Foo },
+		  { path: '/bar', component: Bar }
+		]
+		// 3. 创建 router 实例，然后传 `routes` 配置
+		// 你还可以传别的配置参数, 不过先这么简单着吧。
+		const router = new VueRouter({
+		  routes // （缩写）相当于 routes: routes
+		})
+		// 4. 创建和挂载根实例。
+		// 记得要通过 router 配置参数注入路由，
+		// 从而让整个应用都有路由功能
+		const app = new Vue({
+		  router
+		}).$mount('#app')
+		// 现在，应用已经启动了！
+		</script>
+		</body>
+		
+13、过渡  transition 
+	过渡其实就是一个淡入淡出的效果。Vue在元素显示与隐藏的过渡中，提供了 6 个 class 来切换：
+		v-enter：
+			定义进入过渡的开始状态。在元素被插入之前生效，在元素被插入之后的下一帧移除。
+		v-enter-active：
+			定义进入过渡生效时的状态。在整个进入过渡的阶段中应用，在元素被插入之前生效，在过渡/动画完成之后移除。
+			这个类可以被用来定义进入过渡的过程时间，延迟和曲线函数。
+		v-enter-to: 
+			2.1.8版及以上 定义进入过渡的结束状态。在元素被插入之后下一帧生效 (与此同时 v-enter 被移除)，在过渡/动画完成之后移除。
+		v-leave: 
+			定义离开过渡的开始状态。在离开过渡被触发时立刻生效，下一帧被移除。
+		v-leave-active：
+			定义离开过渡生效时的状态。在整个离开过渡的阶段中应用，在离开过渡被触发时立刻生效，在过渡/动画完成之后移除。
+			这个类可以被用来定义离开过渡的过程时间，延迟和曲线函数。
+		v-leave-to: 
+			2.1.8版及以上 定义离开过渡的结束状态。在离开过渡被触发之后下一帧生效 (与此同时 v-leave 被删除)，在过渡/动画完成之后移除。
+
+14、动画
+	自定义过渡的类名
+		enter-class
+		enter-active-class
+		enter-to-class (2.1.8+)
+		leave-class
+		leave-active-class
+		leave-to-class (2.1.8+)
+
+15、混入
+
+16、Ajax(axios)   https://www.runoob.com/vue2/vuejs-ajax-axios.html
+	Axios 是一个基于 Promise 的 HTTP 库
+	 
+	demo：
+		axios.get('https://www.runoob.com/try/ajax/json_demo.json')
+		  .then(response => (this.info = response))
+		  .catch(function (error) { // 请求失败处理
+			console.log(error);
+		  });
+		axios.post('https://www.runoob.com/try/ajax/demo_axios_post.php')
+		  .then(response => (this.info = response))
+		  .catch(function (error) { // 请求失败处理
+			console.log(error);
+		  });
+	  使用参数：  
+		// 直接在 URL 上添加参数 ID=12345
+		axios.get('/user?ID=12345').then(function (response) {
+			console.log(response);
+		  }).catch(function (error) {
+			console.log(error);
+		  });
+		 
+		// 也可以通过 params 设置参数：
+		axios.get('/user', {
+				params: {
+				ID: 12345
+				}
+			}).then(function (response) {
+				console.log(response);
+			}).catch(function (error) {
+				console.log(error);
+			});
+		axios.post('/user', {
+			firstName: 'Fred',        // 参数 firstName
+			lastName: 'Flintstone'    // 参数 lastName
+		  }).then(function (response) {
+			console.log(response);
+		  }).catch(function (error) {
+			console.log(error);
+		  });
+		  
+		  
+	执行多个并发请求
+		实例
+		function getUserAccount() {
+		  return axios.get('/user/12345');
+		}
+		 
+		function getUserPermissions() {
+		  return axios.get('/user/12345/permissions');
+		}
+		axios.all([getUserAccount(), getUserPermissions()])
+		  .then(axios.spread(function (acct, perms) {
+			// 两个请求现在都执行完成
+		  }));	  
+
+17、Ajax(vue-resource)  https://www.runoob.com/vue2/vuejs-ajax.html
+	//发送get请求
+		this.$http.get('/try/ajax/ajax_info.txt').then(function(res){
+			document.write(res.body);    
+		},function(){
+			console.log('请求失败处理');
+		});
+		如果需要传递数据，可以使用 this.$http.get('get.php',{params : jsonData}) 格式，第二个参数 jsonData 就是传到后端的数据。
+
+		this.$http.get('get.php',{params : {a:1,b:2}}).then(function(res){
+			document.write(res.body);    
+		},function(res){
+			console.log(res.status);
+		});
+
+	// post 发送数据到后端，需要第三个参数 {emulateJSON:true}。
+		emulateJSON 的作用： 如果Web服务器无法处理编码为 application/json 的请求，你可以启用 emulateJSON 选项
+	//发送 post 请求
+		this.$http.post('/try/ajax/demo_test_post.php',
+						{name:"菜鸟教程",url:"http://www.runoob.com"},
+						{emulateJSON:true}
+		).then(function(res){
+			document.write(res.body);    
+		},function(res){
+			console.log(res.status);
+		});
+		
+	使用全局对象方式 Vue.http 或者在一个 Vue 实例的内部使用 this.$http来发起 HTTP 请求。
+
+		// 基于全局Vue对象使用http
+		Vue.http.get('/someUrl', [options]).then(successCallback, errorCallback);
+		Vue.http.post('/someUrl', [body], [options]).then(successCallback, errorCallback);
+
+		// 在一个Vue实例内使用$http
+		this.$http.get('/someUrl', [options]).then(successCallback, errorCallback);
+		this.$http.post('/someUrl', [body], [options]).then(successCallback, errorCallback)
+
+
+19、过滤器
+20、插槽 slot   https://cn.vuejs.org/v2/guide/components-slots.html
+	demo:
+	Vue.component('alert-box', {
+	  template:"
+		<div class="demo-alert-box">
+		  <strong>Error!</strong>
+		  <slot></slot>
+		</div>"
+	})
+21、插件
+
+
+
+

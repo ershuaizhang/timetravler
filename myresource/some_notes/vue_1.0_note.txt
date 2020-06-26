@@ -1,0 +1,288 @@
+1、新建一个实例
+	<div id="app">
+		{{msg}}
+	</div>
+	<script>
+	var vm = new vue{(
+		el:"app",
+		data:{
+			msg:"masg"
+		}，
+		methods:{// 函数
+			function1:function(){
+			
+			},
+			function2:function(){
+			
+			}
+		}
+		directives :{// 自定义指令
+		
+		}
+		filters:{
+			filter1:function(){
+			}
+		}
+		computed:{//计算属性
+		}
+		comments: { // 注册组件
+		}
+		watch：{
+		}
+	)};
+	</script>
+	
+2、watch方法 监控一个属性的变化 并获得变化前后的值
+	<script type = "text/javascript">
+		var vm = new Vue({
+			el: '#app',
+			data: {
+				counter: 1
+			}
+		});
+		vm.$watch('counter', function(nval, oval) {
+			alert('计数器值的变化 :' + oval + ' 变为 ' + nval + '!');
+		});
+	</script>
+
+3、生命周期 11种
+	创建前
+	beforeCreate:function(){	}
+	创建
+	created:function(){	}
+	挂载前
+	beforeMount:function(){	}
+	挂载
+	mounted:function(){	}
+	更新前
+	beforeUpdate:function(){	}
+	更新
+	updated:function(){	}
+	激活
+	activated:function(){	}
+	停激活时
+	deactivated:function(){	}
+	销毁前
+	beforeDestroy:function(){	}
+	销毁
+	destroyed:function(){	}
+	报错
+	errorCaptured:function(){	}
+
+4、定时 触发的一个
+	setTimeout(function(){
+		3秒之后的时
+	},3000);
+	
+5、指令
+	v-once ：	仅加载一次 能执行一次性地插值，当数据改变时，插值处的内容不会更新
+	v-html ：	渲染为html用来将html的字符串渲染为对应的html
+	v-bind:属性 : 	绑定动态的属性   缩写为 ：
+		v-bind:class="{red:1==2,green:1==3}" 	动态绑定对应的class
+	v-if:	条件指令
+	v-else-if:		和v-if 同步使用
+	v-else:		和v-if 同步使用
+	v-show: 	渲染之后 判断是不是展示
+	v-for='one in ones':		列表渲染
+		v-for 可以绑定数据到数组来渲染一个列表：
+		<div id="app">
+		  <ol>
+			<li v-for="site in sites">
+			  {{ site.name }}
+			</li>
+		  </ol>
+		</div>
+		<script>
+		new Vue({
+		  el: '#app',
+		  data: {
+			sites: [
+			  { name: 'Runoob' },
+			  { name: 'Google' },
+			  { name: 'Taobao' }
+			]
+		  }
+		})
+		</script>
+		v-for 可以通过一个对象的属性来迭代数据：
+		<div id="app">
+		  <ul>
+			<li v-for="value in object">
+			{{ value }}
+			</li>
+		  </ul>
+		</div>
+		<div id="app">
+		  <ul>
+			<li v-for="(value, key) in object">
+			{{ key }} : {{ value }}
+			</li>
+		  </ul>
+		</div>
+		<div id="app">
+		  <ul>
+			<li v-for="(value, key, index) in object">
+			 {{ index }}. {{ key }} : {{ value }}
+			</li>
+		  </ul>
+		</div>
+		<script>
+		new Vue({
+		  el: '#app',
+		  data: {
+			object: {
+			  name: '菜鸟教程',
+			  url: 'http://www.runoob.com',
+			  slogan: '学的不仅是技术，更是梦想！'
+			}
+		  }
+		})
+		</script>
+		
+	v-on:	监听事件 缩写为 @
+	v-model:  实现双向绑定
+	
+6、修饰符
+	事件修饰符
+		.stop : 当前事件触发之后立即停止不再向外传递
+		.prevent
+		.capture
+		.self
+		.once
+			<!-- 阻止单击事件冒泡 -->
+			<a v-on:click.stop="doThis"></a>
+			<!-- 提交事件不再重载页面 -->
+			<form v-on:submit.prevent="onSubmit"></form>
+			<!-- 修饰符可以串联  -->
+			<a v-on:click.stop.prevent="doThat"></a>
+			<!-- 只有修饰符 -->
+			<form v-on:submit.prevent></form>
+			<!-- 添加事件侦听器时使用事件捕获模式 -->
+			<div v-on:click.capture="doThis">...</div>
+			<!-- 只当事件在该元素本身（而不是子元素）触发时触发回调 -->
+			<div v-on:click.self="doThat">...</div>
+			<!-- click 事件只能点击一次，2.1.4版本新增 -->
+			<a v-on:click.once="doThis"></a>
+	按键修饰符
+		.enter
+		.tab
+		.delete (捕获 "删除" 和 "退格" 键)
+		.esc
+		.space
+		.up
+		.down
+		.left
+		.right
+		.ctrl
+		.alt
+		.shift
+		.meta
+	表单修饰符
+		.lazy 	在默认情况下， v-model 在 input 事件中同步输入框的值与数据，但你可以添加一个修饰符 lazy ，从而转变为在 change 事件中同步
+		.number 如果想自动将用户的输入值转为 Number 类型（如果原值的转换结果为 NaN 则返回原值）， 
+				可以添加一个修饰符 number 给 v-model 来处理输入值
+		.trim	如果要自动过滤用户输入的首尾空格，可以添加 trim 修饰符到 v-model 上过滤输入
+	
+7、事件
+	点击事件 click
+	变更时事件
+	鼠标滑动事件
+
+8、过滤器filters 
+	格式类似
+	<!-- 在两个大括号中 -->
+	{{ message | capitalize }}
+	<!-- 在 v-bind 指令中 -->
+	<div v-bind:id="rawId | formatId"></div>
+	
+9、组件 component
+	组件是可以服用的vue实例 和正常的实例不同的的不能接受el属性
+
+	创建组件
+  	Vue.component("name",{
+		props:{},//为组件定义属性  在模板内容中可以使用的 在组件调用处 也可以对属性进行赋值
+		data:function(){
+		},
+		// 这个模板内容中必须有个一个对应的根节点 同时可以是使用<slot></slot> 来为组件创建插槽 为引用出提供自定义的内容
+		template:"组件的模板内容",
+		methods:{
+			sendMassage:function(){
+				this.$emit("eventName",参数);
+			}
+		},
+		watch:{
+		},
+		computed:{
+			// 里面的是一些方法供直接调用 为一个属性直接绑定方法
+			message2: function () {
+			  return this.message.split('').reverse().join('')
+			},
+			// computed 属性默认只有 getter ，不过在需要时也可以提供一个 setter
+			myUrl: {
+			  cache: false,// 为一个特殊的计算属性开关缓存支持
+			  get: function () {
+				return 'zhangershuai'
+			  },
+			  set: function (value) {
+
+			  }
+			}
+		}
+	})
+	
+	组件的注册
+		1、全局注册
+		Vue.component('name',{。。。。。}) 
+			弊端：
+				要求每个组件的名字不能重复
+				字符串模板不高亮
+				不支持css
+				没有构建步骤，只能使用html和ES5 javascript 不能预处理 
+		2、局部注册
+			实例化对象时注册
+			new Vue({
+				components:{
+					组件名：{
+						template:"",
+						...
+					}
+				}
+			})
+			导入模块组件注册
+			<script>
+			import name from url 
+			
+			export default {
+				name :"app" ,
+				components:{
+					name
+				}
+			}
+			</script>
+		3、在模块中局部注册
+		一般写在vue的文件中
+		在使用的地方使用 import  from 导入 
+	
+	单文件组件：
+	<template></template>--模板部分
+	<script></script>--脚本部分
+	<style></style>--样式部分
+	
+10、vue目录结构 说明
+
+	build/---项目构建(webpack)相关代码
+	config/---配置目录，包括端口号等
+	node_modules/---npm 加载的项目依赖模块
+	public/---发布到生产环境的目录
+	src/---开发目录
+		components/---目录里面放了一个组件文件，可以不用
+		assets/---放置一些图片，如logo等
+		App.vue---入口文件
+		main.js---项目的核心文件
+	static/	---静态资源目录，如图片、字体
+	package.json---项目配置文件。
+	package-lock.json
+	index.html	---首页入口文件
+
+
+		
