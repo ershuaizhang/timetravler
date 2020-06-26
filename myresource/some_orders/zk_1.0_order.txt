@@ -8,3 +8,23 @@
 	delete /nodeName
 	查看节点的状态
 	stat /nodeName
+
+
+
+	
+3、ACL 权限控制	
+	//创建节点
+	create /digest_node1
+	//设置digest权限验证
+	setAcl /digest_node1 digest:用户名:base64格式密码:rwadc 
+	//查询节点Acl权限
+	getAcl /digest_node1 
+	//授权操作
+	addauth digest user:passwd
+	
+	在 ZooKeeper 中已经定义好的权限有 5 种：
+		数据节点（create）创建权限，授予权限的对象可以在数据节点下创建子节点；
+		数据节点（wirte）更新权限，授予权限的对象可以更新该数据节点；
+		数据节点（read）读取权限，授予权限的对象可以读取该节点的内容以及子节点的信息；
+		数据节点（delete）删除权限，授予权限的对象可以删除该数据节点的子节点；
+		数据节点（admin）管理者权限，授予权限的对象可以对该数据节点体进行 ACL 权限设置。

@@ -6,3 +6,11 @@
 		Watcher：监控事件
 	二、客户端通过getData、exists、getChildren 接口来向服务器注册Watcher
 		getData(String path, Watcher watcher, Stat stat)
+
+
+2、ZooKeeper 如何进行序列化？ https://kaiwu.lagou.com/course/courseInfo.htm?courseId=158#/detail/pc?id=3134
+
+
+
+
+
