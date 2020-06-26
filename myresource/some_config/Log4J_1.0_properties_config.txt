@@ -1,0 +1,90 @@
+﻿demo：---properties
+
+log4j.logger.com.aa.ClassName=INFO,f
+
+log4j.appender.f = org.apache.log4j.RollingFileAppender
+log4j.appender.f.File = D:\\test.log
+log4j.appender.f.MaxFileSize = 30MB
+log4j.appender.f.MaxBackupIndex = 3
+log4j.appender.f.layout = org.apache.log4j.PatternLayout
+log4j.appender.f.layout.ConversionPattern = %d{yyyy-MM-dd hh:mm:ss}:%p %t %c - %m%n
+
+
+
+配置日志信息输出目的地
+	log4j.appender.appenderName = fully.qualified.name.of.appender.class (下方的一个)
+	org.apache.log4j.ConsoleAppender （控制台）
+	org.apache.log4j.FileAppender （文件）
+	org.apache.log4j.DailyRollingFileAppender （每天产生一个日志文件）
+	org.apache.log4j.RollingFileAppender （文件大小到达指定尺寸的时候产生一个新的文件）
+	org.apache.log4j.WriterAppender （将日志信息以流格式发送到任意指定的地方）
+	可通过 log4j.appender.appenderName.MaxFileSize=100KB设置文件大小
+	还可通过 log4j.appender.appenderName.MaxBackupIndex=1设置为保存一个备份文件。
+配置日志信息的格式
+	log4j.appender.appenderName.layout = fully.qualified.name.of.layout.class (下方的一个)
+	org.apache.log4j.HTMLLayout （以HTML表格形式布局），  
+	org.apache.log4j.PatternLayout （可以灵活地指定布局模式），  
+	org.apache.log4j.SimpleLayout （包含日志信息的级别和信息字符串），  
+	org.apache.log4j.TTCCLayout （包含日志产生的时间、线程、类别等等信息）
+
+控制台选项
+	ConsoleAppender控制台选项
+		Threshold=DEBUG:指定日志消息的输出最低层次。
+		ImmediateFlush=true:默认值是true,意谓着所有的消息都会被立即输出。
+		Target=System.err：默认情况下是：System.out,指定输出控制台
+	FileAppender 选项
+		Threshold=DEBUF:指定日志消息的输出最低层次。
+		ImmediateFlush=true:默认值是true,意谓着所有的消息都会被立即输出。
+		File=mylog.txt:指定消息输出到mylog.txt文件。
+		Append=false:默认值是true,即将消息增加到指定文件中，false指将消息覆盖指定的文件内容。
+	RollingFileAppender 选项
+		Threshold=DEBUG:指定日志消息的输出最低层次。
+		ImmediateFlush=true:默认值是true,意谓着所有的消息都会被立即输出。
+		File=mylog.txt:指定消息输出到mylog.txt文件。
+		Append=false:默认值是true,即将消息增加到指定文件中，false指将消息覆盖指定的文件内容。
+		MaxFileSize=100KB: 后缀可以是KB, MB 或者是 GB. 在日志文件到达该大小时，将会自动滚动，即将原来的内容移到mylog.log.1文件。
+		MaxBackupIndex=2:指定可以产生的滚动文件的最大数。
+		log4j.appender.A1.layout.ConversionPattern=%-4r %-5p %d{yyyy-MM-dd HH:mm:ssS} %c %m%n
+------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------
+log4j.properties  https://www.cnblogs.com/pigtail/archive/2013/02/16/2913195.html
+
+### set log levels ###   log4j.rootLogger=[level],appenderName,appenderName,......
+log4j.rootLogger = INFO , console , debug , error ,stdout
+ 
+### console ### 
+log4j.appender.console = org.apache.log4j.ConsoleAppender 
+log4j.appender.console.Target = System.out 
+log4j.appender.console.layout = org.apache.log4j.PatternLayout 
+log4j.appender.console.layout.ConversionPattern = %-d{yyyy-MM-dd HH\:mm\:ss} [%p]-[%c] %m%n 
+ 
+### log file ### 
+log4j.appender.debug = org.apache.log4j.DailyRollingFileAppender 
+log4j.appender.debug.File = ../logs/springmvc-demo.log 
+log4j.appender.debug.Append = true 
+log4j.appender.debug.Threshold = INFO 
+log4j.appender.debug.layout = org.apache.log4j.PatternLayout 
+log4j.appender.debug.layout.ConversionPattern = %-d{yyyy-MM-dd HH\:mm\:ss} [%p]-[%c] %m%n 
+ 
+### exception ### 
+log4j.appender.error = org.apache.log4j.DailyRollingFileAppender 
+log4j.appender.error.File = ../logs/springmvc-demo_error.log 
+log4j.appender.error.Append = true 
+log4j.appender.error.Threshold = ERROR 
+log4j.appender.error.layout = org.apache.log4j.PatternLayout 
+log4j.appender.error.layout.ConversionPattern = %-d{yyyy-MM-dd HH\:mm\:ss} [%p]-[%c] %m%n 
+ 
+ 
+###需要声明，然后下方才可以使druid sql输出，否则会抛出log4j.error.key not found 
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender 
+log4j.appender.stdout.Target=System.out 
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout 
+log4j.appender.stdout.layout.ConversionPattern=%d{ISO8601} %l %c%n%p: %m%n 
+ 
+### druid sql ### 
+log4j.logger.druid.sql=warn,stdout 
+log4j.logger.druid.sql.DataSource=warn,stdout 
+log4j.logger.druid.sql.Connection=warn,stdout 
+log4j.logger.druid.sql.Statement=warn,stdout 
+log4j.logger.druid.sql.ResultSet=warn,stdout 
