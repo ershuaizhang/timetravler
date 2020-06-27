@@ -1,4 +1,0 @@
-﻿1、停止服务
-	net stop mysqlName
-2、启动服务
-	net start mysqlName

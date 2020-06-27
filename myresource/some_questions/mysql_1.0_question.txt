@@ -1,8 +1,0 @@
-﻿1、执行SET CLOBAL log_bin_trust_function_creators = 1 报错
-	现象：
-	当有mysql本地或远程建立function或procedure时报上面的错误
-	经试验是log_bin_trust_function_creators值为off导致
-	设置：set global log_bin_trust_function_creators=1;
-	但重启后失效
-           永久windows下my.ini[mysqld]區段加上log_bin_trust_function_creators=1
-           linux下/etc/my.cnf下my.ini[mysqld]區段加上log_bin_trust_function_creators=1
