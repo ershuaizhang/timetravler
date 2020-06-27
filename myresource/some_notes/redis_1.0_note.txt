@@ -1,0 +1,41 @@
+﻿Redis是一个键值存储仓库，经常被称为 NoSQL 数据库。
+	是一个高性能的key-value数据库
+	键值存储仓库的本质是有能力按照一个键映射一个值的方式存储一些数据，然后你可以只通过这个键寻找到你之前通过这个键存储的值
+	
+可以使用命令SET将值『fido』存储在键『server:name』中：
+	SET server:name "fido"
+
+查询key对应的值	
+	GET server:name # => "fido"
+	
+数据过期设置
+	SET resource:lock "Redis Demo"  ---存入
+	EXPIRE resource:lock 120 ---存入120s
+
+	TTL resource:lock # => 120  --- 查看这个键还剩余多少时间
+	# after 122s later
+	TTL resource:lock # => -2  --- 已经过期了 2s
+	
+	这里的 -2 是指 resource:lock 已经不存在了，如果返回值是 -1 说明这个键永远不会过 期。
+	注意：当你使用 SET 重新设置一个键， 它对应的 TTL 就会被重置
+
+redis列表 相关
+	RPUSH 将值添加到列表的末尾
+	LPUSH 将值添加到列表的开始
+	LRANGE是从列表中去一个指定范围的子集。它通过你想取的范围的第一个元素的下标和 最后一个元素的下标作为参数。
+			将 -1 作为参数意味着取值到列表的最后。
+	LLEN 返回指定列表的长度
+	LPOP 从列表中删除第一个元素，并将它作为返回值
+	RPOP 从列表中删除最后一个元素，并将它作为返回值
+	
+redis集合 相关	
+	SADD 将给定的值添加到集合中
+	SREM 从集合中移除指定的值
+	SISMEMBER 检查一个值是否在集合中，返回0不在，返回1在。
+	SMEMBERS 返回集合中所有的元素
+	SUNION 合并两个或者更多个集合，并且将所有的元素返回。
+	
+
+
+Redis 设计与实现 https://www.w3cschool.cn/hdclil/cnv2lozt.html 
+

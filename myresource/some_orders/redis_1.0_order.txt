@@ -1,0 +1,45 @@
+﻿命令：
+	CLIENT LIST		返回连接到 redis 服务的客户端列表
+	CLIENT SETNAME	设置当前连接的名称
+	CLIENT GETNAME	获取通过 CLIENT SETNAME 命令设置的服务名称
+	CLIENT PAUSE	挂起客户端连接，指定挂起的时间以毫秒计
+	CLIENT KILL		关闭客户端连接
+启动客户端：
+	$ redis-cli
+	$ redis-cli -h host -p port -a password
+		演示如何连接到主机为 127.0.0.1，端口为 6379 ，密码为 mypass 的 redis 服务上。
+			$redis-cli -h 127.0.0.1 -p 6379 -a "mypass"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

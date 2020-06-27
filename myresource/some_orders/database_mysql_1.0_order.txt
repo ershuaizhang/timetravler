@@ -1,0 +1,38 @@
+﻿1、停止服务
+	net stop mysqlName
+2、启动服务
+	net start mysqlName
+3、检测系统是否自带安装 MySQL:
+	rpm -qa | grep mysql
+4、普通删除模式	
+	rpm -e mysql　　// 
+5、强力删除模式
+	rpm -e --nodeps mysql　　// 如果使用上面命令删除时，提示有依赖的其它文件，则用该命令可以对其进行强力删除	
+6、登录 MySQL	
+	mysql -h 主机名 -u 用户名 -p
+	参数说明：
+		-h : 指定客户端所要登录的 MySQL 主机名, 登录本机(localhost 或 127.0.0.1)该参数可以省略;
+		-u : 登录的用户名;
+		-p : 告诉服务器将会使用一个密码来登录, 如果所要登录的用户名密码为空, 可以忽略此选项
+7、选择数据库
+	use RUNOOB;
+8、连接的使用
+	INNER JOIN（内连接,或等值连接）：获取两个表中字段匹配关系的记录。
+	LEFT JOIN（左连接）：获取左表所有记录，即使右表没有对应匹配的记录。
+	RIGHT JOIN（右连接）： 与 LEFT JOIN 相反，用于获取右表所有记录，即使左表没有对应匹配的记录。		
+9、创建索引
+	CREATE INDEX indexName ON mytable(username(length)); 
+10、添加索引
+	ALTER table tableName ADD INDEX indexName(columnName)
+11、显示索引
+	SHOW INDEX FROM table_name;
+
+
+
+
+
+
+
+
+	
+	

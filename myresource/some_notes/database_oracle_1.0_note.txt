@@ -1,0 +1,478 @@
+﻿1、表
+	--例：
+	创建表名为table1，列名为column1，column2，…，数据类型为特定数据类型的表
+	Create table table1（
+	Column1 datetype，
+	Column2 datetype,
+	……
+	）；
+	
+	--添加字段：在已经建好的表table1中添加字段columnX，字符类型为number
+	Alter table table1 add columnX number；
+	--修改字段数据类型：修改columnX的数据类型为date
+	Alter table table1 Modify columnX date；
+	--修改字段名：修改columnX的名称为columnY
+	Alter table table1 Rename column columnX to columnY；
+	--删除字段：删除字段columnY
+	Alter table table1 Drop column columnY
+	--修改表名：修改表table1的名称为table2
+	Rename table1 to table2；
+	--删除表：删除表table2：
+	Drop table table2；
+	
+	约束
+		1、添加主键约束（将stuNo作为主键）
+		alter table stuInfo add constraint PK_stuNo primary key (stuNo)
+
+		2、添加外键约束 (主表stuInfo和从表stuMarks建立关系，关联字段stuNo)
+		alter table stuInfo add constraint FK_stuNo foreign key(stuNo) references stuinfo(stuNo)
+
+		3、添加唯一约束（身份证号唯一）
+		alter table stuInfo add constraint UQ_stuID unique(stuID)
+
+		4、添加默认约束（如果地址不填 默认为“地址不详”）
+		alter table stuInfo add constraint DF_stuAddress default (‘地址不详’) for stuAddress
+
+		5、添加检查约束 （对年龄加以限定 15-40岁之间）
+		alter table stuInfo add constraint CK_stuAge check (stuAge between 15 and 40)
+
+		6、添加表注释：学生信息表
+		comment on table STUINFO 
+		is '学生信息表';
+
+		7、添加列名称：学号
+		comment on column STUINFO.stuid is '学号';
+		comment on column STUINFO.stuname is '学生姓名';
+
+	
+2、视图
+	视图是一个对应的虚拟的表，并不是真实的存在与数据库中
+	CREATE [OR REPLACE]  VIEW view_name
+	AS
+	SELECT查询
+	[WITH READ ONLY CONSTRAINT]
+	解释：
+		1、OR REPLACE：如果视图已经存在，则替换旧视图。
+		2、WITH READ ONLY：默认不填的，用户是可以通过视图对基表执行增删改操作，但是有很多在基表上的限制
+		（比如：基表中某列不能为空，但是该列没有出现在视图中，则不能通过视图执行 insert 操作，或者基表设置了某些约束，
+		这时候插入视图或者修改视图的值，有可能会报错）， 
+		WITH READ ONLY 说明视图是只读视图，不能通过该视图进行增删改操作。但是在现实开发中，基本上不通过视图对表中的数据进行增删改操作
+	
+	使用的时候可以直接当作表来进行处理
+	
+
+3、索引
+	获得单个表和索引DDL语句的方法
+	　　set heading off;　　 
+	　　set echo off;　　 
+	　　Set pages 999;　　 
+	　　set long 90000; 
+
+	　　spool get_single.sql　　 
+	　　select dbms_metadata.get_ddl('TABLE','SZT_PQSO2','SHQSYS') from dual;　　 
+	　　select dbms_metadata.get_ddl('INDEX','INDXX_PQZJYW','SHQSYS') from dual;　 
+	　　spool off;
+	获得整个SCHEMA DDL语句的方法
+		set pagesize 0　　 
+	　　set long 90000　　 
+	　　set feedback off　　 
+	　　set echo off 　　 
+	　　spool get_schema.sql 　　 
+	　　connect shqsys/shqsys@hawk1;　　 
+	　　SELECT DBMS_METADATA.GET_DDL('TABLE',u.table_name) 
+	　　FROM USER_TABLES u; 
+	　　SELECT DBMS_METADATA.GET_DDL('INDEX',u.index_name)　　 
+	　　FROM USER_INDEXES u;　　 
+	　　spool off;
+	
+4、过程
+	写ORACLE存储过程 create or replace procedure ...
+	基本结构
+		CREATE OR REPLACE PROCEDURE 存储过程名字 
+		( 
+		   参数1 IN NUMBER, 
+		   参数2 IN NUMBER 
+		) AS / IS   /*IS关键词表明后面将跟随一个PL/SQL体*/
+		变量1 INTEGER :=0; 
+		变量2 DATE; 
+		BEGIN  /*表明PL/SQL体的开始*/
+			null /*表明什么事都不做，这句不能删去，因为PL/SQL体中至少需要有一句;*/
+		END 存储过程名字  /*表明PL/SQL体的结束*/
+		
+		
+	SELECT INTO STATEMENT
+	  将select查询的结果存入到变量中，可以同时将多个列存储多个变量中，必须有一条
+	  记录，否则抛出异常(如果没有记录抛出NO_DATA_FOUND)
+	  例子： 
+	  BEGIN
+	  SELECT col1,col2 into 变量1,变量2 FROM typestruct where xxx;
+	  EXCEPTION
+	  WHEN NO_DATA_FOUND THEN
+		  xxxx;
+	  END;	
+	while 循环
+		WHILE V_TEST=1 LOOP 
+		 BEGIN 
+		XXXX 
+		 END; 
+		 END LOOP; 
+	IF 判断
+		IF V_TEST=1 THEN 
+			BEGIN  
+				do something 
+			END; 
+		END IF; 
+	变量赋值
+		V_TEST := 123; 
+	用for in 使用cursor (游标)
+		create or replace procedure test() as
+			Cursor cursor is select name from student; name varchar(20);
+		begin
+			for name in cursor LOOP
+				begin
+					dbms_output.putline(name);
+				end;
+			end LOOP;
+		end test; 
+	带参数的cursor(游标)
+		CURSOR C_USER(C_ID NUMBER) IS SELECT NAME FROM USER WHERE TYPEID=C_ID; 
+		 OPEN C_USER(变量值); 
+		 LOOP 
+		FETCH C_USER INTO V_NAME; 
+		EXIT FETCH C_USER%NOTFOUND; 
+		   do something 
+		 END LOOP; 
+		 CLOSE C_USER;
+ 
+ 
+	已有的和定时任务有关的过程 job相关的存储过程
+		1、 
+		Broken()过程更新一个已提交的工作的状态，典型地是用来把一个已破工作标记为未破工作。 
+		这个过程有三个参数：job 、broken与next_date。 
+		 
+		PROCEDURE Broken (job       IN binary_integer, 
+						  Broken    IN boolean, 
+						  next_date IN date :=SYSDATE) 
+		 
+		job参数是工作号，它在问题中唯一标识工作。 
+		broken参数指示此工作是否将标记为破——TRUE说明此工作将标记为破，而FLASE说明此工作将标记为未破。 
+		next_date参数指示在什么时候此工作将再次运行。此参数缺省值为当前日期和时间。 
+		 
+		2、 
+		Change()过程用来改变指定工作的设置。 
+		这个过程有四个参数：job、what 、next_date与interval。 
+		 
+		PROCEDURE Change (job        IN binary_integer, 
+						  What       IN varchar2, 
+						  next_date  IN date, 
+						  interval   IN varchar2) 
+		 
+		此job参数是一个整数值，它唯一标识此工作。 
+		What参数是由此工作运行的一块PL/SQL代码块。 
+		next_date参数指示何时此工作将被执行。 
+		interval参数指示一个工作重执行的频度。 
+		 
+		3、 
+		Interval()过程用来显式地设置重执行一个工作之间的时间间隔数。 
+		这个过程有两个参数：job与interval。 
+		 
+		PROCEDURE Interval (job      IN binary_integer, 
+							Interval IN varchar2) 
+		 
+		job参数标识一个特定的工作。interval参数指示一个工作重执行的频度。 
+		 
+		4、 
+		ISubmit()过程用来用特定的工作号提交一个工作。 
+		这个过程有五个参数：job、what、next_date、interval与no_parse。 
+		 
+		PROCEDURE ISubmit (job       IN binary_ineger, 
+						   What      IN varchar2, 
+						   next_date IN date, 
+						   interval  IN varchar2, 
+						   no_parse  IN booean:=FALSE) 
+		 
+		这个过程与Submit()过程的唯一区别在于此job参数作为IN型参数传递且包括一个 
+		由开发者提供的工作号。如果提供的工作号已被使用，将产生一个错误。 
+		 
+		5、 
+		Next_Date()过程用来显式地设定一个工作的执行时间。这个过程接收两个参数：job与next_date。 
+		 
+		PROCEDURE Next_Date(job         IN binary_ineger, 
+							next_date   IN date) 
+		 
+		job标识一个已存在的工作。next_date参数指示了此工作应被执行的日期与时间。 
+		 
+		6、 
+		Remove()过程来删除一个已计划运行的工作。这个过程接收一个参数： 
+		 
+		PROCEDURE Remove(job IN  binary_ineger); 
+		 
+		job参数唯一地标识一个工作。这个参数的值是由为此工作调用Submit()过程返回的job参数的值。 
+		已正在运行的工作不能由调用过程序删除。 
+		 
+		7、 
+		Run()过程用来立即执行一个指定的工作。这个过程只接收一个参数： 
+		 
+		PROCEDURE Run(job IN binary_ineger)  
+		 
+		job参数标识将被立即执行的工作。 
+		 
+		8、 
+		使用Submit()过程，工作被正常地计划好。 
+		这个过程有五个参数：job、what、next_date、interval与no_parse。 
+		 
+		PROCEDURE Submit ( job       OUT binary_ineger, 
+						   What      IN  varchar2, 
+						   next_date IN  date, 
+						   interval  IN  varchar2, 
+						   no_parse  IN  booean:=FALSE) 
+		 
+		job参数是由Submit()过程返回的binary_ineger。这个值用来唯一标识一个工作。 
+		what参数是将被执行的PL/SQL代码块。 
+		next_date参数指识何时将运行这个工作。 
+		interval参数何时这个工作将被重执行。 
+		no_parse参数指示此工作在提交时或执行时是否应进行语法分析——TRUE 
+		指示此PL/SQL代码在它第一次执行时应进行语法分析， 
+		而FALSE指示本PL/SQL代码应立即进行语法分析。 
+		 
+		9、 
+		User_Export()过程返回一个命令，此命令用来安排一个存在的工作以便此工作能重新提交。 
+		此程序有两个参数：job与my_call。 
+		 
+		PROCEDURE User_Export(job        IN binary_ineger, 
+							  my_call    IN OUT varchar2) 
+		 
+		job参数标识一个安排了的工作。my_call参数包含在它的当前状态重新提交此工作所需要 
+		的正文。 
+		 
+		10、 
+		What()过程应许在工作执行时重新设置此正在运行的命令。这个过程接收两个参数：job与what。 
+		 
+		PROCEDURE What (job  IN binary_ineger, 
+						What IN OUT varchar2) 
+		 
+		job参数标识一个存在的工作。what参数指示将被执行的新的PL/SQL代码。 
+
+
+5、函数
+	见问题文件 oracle_1.0_question.txt 中的函数
+	
+	
+6、自定义
+
+
+7、队列 ---> 序列
+
+
+8、触发器
+	触发器是特定事件出现的时候，自动执行的代码块。类似于存储过程，
+	触发器与存储过程的区别在于: 存储过程是由用户或应用程序显式调用的,而触发器是不能被直接调用的。
+	
+	触发器的语法：
+		CREATE [OR REPLACE] TIGGER 触发器名 触发时间 触发事件
+		ON 表名
+		[FOR EACH ROW]
+		BEGIN
+			pl/sql 语句
+		END；
+		/
+		
+		触发器名：触发器对象的名称。
+			由于触发器是数据库自动执行的，因此该名称只是一个名称，没有实质的用途。
+		触发时间：指明触发器何时执行，该值可取：
+			before---表示在数据库动作之前触发器执行；
+			after---表示在数据库动作之后出发器执行。
+		触发事件：指明哪些数据库动作会触发此触发器：
+			insert：数据库插入会触发此触发器；
+			update：数据库修改会触发此触发器；
+			delete：数据库删除会触发此触发器。
+		表 名：数据库触发器所在的表。
+			for each row：对表的每一行触发器执行一次。如果没有这一选项，则只对整个表执行一次。
+	
+	触发器类型：
+		1、 语句触发器
+		2、 行触发器
+		3、 INSTEAD OF 触发
+		4、 系统条件触发器
+		5、 用户事件触发器	
+		
+	触发器禁止和启用： 
+		ALTER TRIGGER trigger_name DISABLE;
+		ALTER TRIGGER trigger_name ENABLE;
+		
+	demo:	
+	*表级触发器
+		create or replace trigger Tristudinfo
+		after insert or update or delete
+		on studinfo
+		begin
+			dbms_output.put_line("在Studinfo表上执行了DML语句操作");
+		end;
+	*行级触发器
+		create or replace trigger Tristudinfo
+		after insert or update or delete
+		on studinfo
+		for each row
+		begin
+			dbms_output.put_line("在Studinfo表上执行了DML语句操作");
+		end;
+		链接：https://www.jianshu.com/p/2b880b9427b1
+
+9、序列
+	CREATE SEQUENCE sequence_name
+	[MAXVALUE num|NOMAXVALUE]
+	[MINVALUE num|NOMINVALUE]
+	[START WITH num]
+	[INCREMENT BY increment]
+	[CYCLE|NOCYCLE]
+	[CACHE num|NOCACHE]
+
+	语法解析：
+		1、MAXVALUE/MINVALUE：指定的是序列的最大值和最小值。
+		2、NOMAXVALUE/NOMINVALUE：不指定序列的最大值和最小值，使用系统的默认选项，升序的最大值：10^27次方，降序是-1。
+			升序最小值：1，降序的最小值：-10^26。
+		3、START WITH：指定从某一个整数开始，升序默认是1，降序默认是-1。
+		4、CYCLE | NOCYCLE:表示序列达到最大值或者最小值的时候，是否重新开始。CYCLE：重新开始，NOCYCLE：不重新开始。
+		5、CACHE：使用 CACHE 选项时，该序列会根据序列规则预生成一组序列号。保留在内存中，当使用下一个序列号时，可以更快的响应。
+			当内存中的序列号用完时，系统再生成一组新的序列号，并保存在缓存中，这样可以提高生成序列号的效率 。
+		6、NOCACHE：不预先在内存中生成序列号。
+	
+	CREATE SEQUENCE seqTest
+	INCREMENT BY 1 -- 每次加几个
+	START WITH 1 -- 从1开始计数
+	NOMAXvalue -- 不设置最大值
+	NOCYCLE -- 一直累加，不循环
+	CACHE NOCACHE --设置缓存cache个序列，如果系统down掉了或者其它情况将会导致序列不连续，也可以设置为---------NOCACHE
+	
+	使用
+		select seqName.nextval from dual--下一个值
+		select seqName.currval from dual--当前的值
+
+10、定时任务
+		写定时任务 dbms_job.submit(...)
+		执行定时任务 dbms_job.run(job num)
+
+	创建job
+		declare job job_number;
+		begin
+			dbms_job.submit(
+				 job =>job, /*自动生成JOB_ID*/
+				 what=>'PROC1;PROC2;',--存储过程名字 可以写多个也可以写单个
+				 next_date => sysdate,--下一次执行的时间  /*初次执行时间-立即执行*/  
+				 interval =>'TRUNC(SYSDATE + 1)');--每天凌晨同步一次
+			commit;
+		end;
+	查看job
+		SELECT * FROM DBA_JOBS;
+		select * from all_jobs;
+		SELECT * FROM USER_JOBS;
+	正在运行的定时任务	
+		select * from dba_jobs_running;
+
+	根据查看到的job id进行删除
+		begin
+		  dbms_job.remove(job_number);  /*删除自动执行的job,参数是 job的id*/
+		  commit;
+		end;
+	手动执行定时任务	
+		BEGIN  
+			DBMS_JOB.RUN(643); --643为任务的ID  
+		END;
+
+	SYSDATE+n’,n泛指一个以天为单位的时间间隔.eg:
+		描述                   Interval参数值
+		每天运行一次            ‘SYSDATE+1′
+		每小时运行一次        ‘SYSDATE+1/24′
+		10分钟运行一次      ‘SYSDATE+10/(60*24)’
+		每30秒运行一次    ‘SYSDATE+30/(60*24*60)’
+		每星期运行一次         ‘SYSDATE+7′
+	定时到特定日期或时间的任务,eg:
+		描述									Lnterval参数值
+		每天午夜12点						‘TRUNC(SYSDATE+1)’
+		每天早上8点30分					‘TRUNC(SYSDATE+1)+(8*60+30)/(24*60)’
+		每星期二中午12点			‘NEXT_DAY(TRUNC(SYSDATE),”TUESDAY”)+12/24′
+		每个月第一天的午夜12点			‘TRUNC(LAST_DAY(SYSDATE)+1)’
+		每个季度最后一天的晚上11点	‘TRUNC(ADD_MONTHS(SYSDATE+2/24,3),’Q')-1/24′
+		每星期六,日早上6点10分		‘TRUNC(LEAST(NEXT_DAY(SYSDATE,”SATURDAY”),NEXT_DAY(SYSDATE,”SUNDAY”)))+(6*60+10)/(24*60)’
+
+    删除job:				dbms_job.remove(jobno);
+    修改要执行的操作:job:	dbms_job.what(jobno,what);
+    修改下次执行时间：		dbms_job.next_date(job,next_date);
+    修改间隔时间：			dbms_job.interval(job,interval);
+    停止job:				dbms.broken(job,broken,nextdate);
+    启动job:				dbms_job.run(jobno);
+
+	子过程：  
+		Broken()过程。 
+		change()过程。 
+		Interval()过程。 
+		Isubmit()过程。 
+		Next_Date()过程。 
+		Remove()过程。 
+		Run()过程。 
+		Submit()过程。 
+		User_Export()过程。 
+		What()过程。
+		
+
+11、用户
+	-- Create the user  新建用户
+	create user READ_USER
+	  identified by "read_user"
+	  default tablespace TIMETRAVEL_USER
+	  temporary tablespace TIMETRAVEL_TEMP
+	  profile PASSWD_UNLIMIT;
+	-- Grant/Revoke role privileges  受/收 角色权限
+	grant base_role to READ_USER;
+	grant resource to READ_USER;
+	-- Grant/Revoke system privileges   受/收 系统权限
+	grant create database link to READ_USER;
+	grant create sequence to READ_USER;
+	grant create session to READ_USER;
+	grant create synonym to READ_USER;
+	grant create table to READ_USER;
+	grant create view to READ_USER;
+
+	查看当前用户： 
+	select * from v$session;     		--->查看所有连接信息
+	select * from V$PWFILE_USERS;　　	--->查看当前用户有sysdba或sysoper系统权限(查询时需要相应权限)
+	select * from session_privs;　　	--->当前用户所拥有的全部权限 
+	select * from session_roles;   		--->当前用户被激活的全部角色
+
+	select * from user_role_privs;		--->查看当前用户的角色
+	select * from user_sys_privs;		--->查看当前用户的系统权限
+	select * from user_tab_privs;		--->查看当前用户的表级权限
+
+	select * from user_users;			--->查看当前用户的详细信息
+	select * from user_tables;			--->查看当前用户的表
+	select * from all_tab_privs; 　　	--->查看当前用户的所拥有对象
+	用户：
+	select * from dba_users;  			--->显示所有用户的详细信息
+	select * from all_users;  			--->显示用户及用户id和创建用户时间三个字段
+	
+	
+12、权限
+	查看权限：
+	select * from dba_sys_privs;		--->查询某个用户所拥有的系统权限
+	select * from dba_tab_privs;        --->查看所有用户的对象权限
+
+	select * from table_privilege_map;?	--->查看所有对象权限?
+	select * from system_privilege_map;	--->查看所有系统权限
+		
+	select * from all_sys_privs;		--->查看系统权限
+	select * from V$PWFILE_USERS;		--->查看哪些用户有sysdba或sysoper系统权限(查询时需要相应权限)
+
+	角色：
+	select * from dba_roles;			--->查看所有角色
+	select * from dba_role_privs;		--->全部用户被授予的角色
+	Select * from ROLE_ROLE_PRIVS;		--->查看所有角色被赋予的角色
+	select * from role_tab_privs;?		--->查看角色拥有的对象权限
+	select * from role_sys_privs;		--->查看角色(只能查看登陆用户拥有的角色)所包含的权限
+
+
+--->
+13、其他
+	select * from v$database;			--->查看数据库名
+	select * from user_source			--->查询所有函数和储存过程
+	select * from v$instance; 			--->查看sid
+	desc tableName						--->查询表结构

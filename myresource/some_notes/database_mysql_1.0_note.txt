@@ -1,0 +1,7 @@
+﻿1、创建数据库
+	CREATE DATABASE 数据库名;
+2、删除数据库
+	drop database <数据库名>;
+	
+	
+	
