@@ -39,3 +39,30 @@
 	理由是箭头函数绑定了父级作用域的上下文，所以 this 将不会按照期望指向 Vue 实例，this.a 将是 undefined。
 
 　　当然有很多this需要指向vue实例的时候，都需要慎用箭头函数	
+
+5、vue的实现流程
+	三要素: 双向绑定、模板解析、渲染
+
+	第一步：解析模板成render函数
+
+		with的引用
+		模板中所有的信息都要被render函数包含
+		模板中用到的data属性都变成js变量
+		v-modle、v-for……变成js
+		返回vnode
+	第二步： 响应式开始监听
+
+		通过object.defineProperty监听到data中属性的get和set方法
+		将data中的属性代理带vm上
+	第三步： 首次渲染，显示页面，绑定依赖
+
+		首次渲染使用uodateComponent()函数
+		vm.patch（$el, vnode）
+		patch将vnode转换成dom，完成首次渲染
+	第四步：data变化，触发rerender
+
+		命中set的监听
+		set 中执行updateComponent
+		uodate重新执行render()
+		vdom和preVdom比较
+		渲染到dom中
