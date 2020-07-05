@@ -9,6 +9,23 @@
 
 
 2、ZooKeeper 如何进行序列化？ https://kaiwu.lagou.com/course/courseInfo.htm?courseId=158#/detail/pc?id=3134
+	序列化是指将我们定义好的 Java 类型转化成数据流的形式，
+	之所以这么做是因为在网络传输过程中，TCP 协议采用“流通信”的方式，提供了可以读写的字节流。
+	而这种设计的好处在于避免了在网络传输过程中经常出现的问题：比如消息丢失、消息重复和排序等问题。
+	
+	Java 中进行序列化和反序列化的过程中，主要用到了 ObjectInputStream 和 ObjectOutputStream 两个 IO 类。
+	ObjectOutputStream 负责将对象进行序列化并存储到本地。而 ObjectInputStream 从本地存储中读取对象信息反序列化对象。
+	
+	在 ZooKeeper 中并没有采用和 Java 一样的序列化方式，而是采用了一个 Jute 的序列解决方案作为 ZooKeeper 框架自身的序列化方式
+	
+	
+3、如何使用 Jute 在 ZooKeeper 中实现序列化。
+	如果我们要想将某个定义的类进行序列化，首先需要该类实现 Record 接口的 serilize 和 deserialize 方法，
+	这两个方法分别是序列化和反序列化方法。	
+	
+	
+4、ZooKeeper 协议	
+	ZooKeeper 是在 TCP/IP 协议的基础上实现了自己特有的通信协议格式
 
 
 

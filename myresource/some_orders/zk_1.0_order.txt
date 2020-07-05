@@ -28,3 +28,17 @@
 		数据节点（read）读取权限，授予权限的对象可以读取该节点的内容以及子节点的信息；
 		数据节点（delete）删除权限，授予权限的对象可以删除该数据节点的子节点；
 		数据节点（admin）管理者权限，授予权限的对象可以对该数据节点体进行 ACL 权限设置。
+		
+	权限模式：Scheme
+		权限模式就是用来设置 ZooKeeper 服务器进行权限验证的方式。
+		ZooKeeper 的权限验证方式大体分为两种类型，一种是范围验证，另外一种是口令验证(也可以理解为用户名密码的方式)
+		
+	每个节点都有维护自身的 ACL 权限数据，即使是该节点的子节点也是有自己的 ACL 权限而不是直接继承其父节点的权限	
+	
+	自定义权限：
+		最核心的一点是实现 ZooKeeper 提供的权限控制器接口 AuthenticationProvider。
+		实现了自定义权限后，接下来就需要将自定义的权限控制注册到 ZooKeeper 服务器中，而注册的方式通常有两种。
+			第一种是通过设置系统属性来注册自定义的权限控制器：
+			复制-Dzookeeper.authProvider.x=CustomAuthenticationProvider
+			另一种是在配置文件 zoo.cfg 中进行配置：
+			复制authProvider.x=CustomAuthenticationProvider
