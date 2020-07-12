@@ -204,7 +204,10 @@
 
 	# 看看分支历史
 	$ git log --graph --pretty=oneline --abbrev-commit
-		
+	
+	# 以图表形式查看分支
+	$ git log --graph
+	
 	# 显示所有提交过的用户，按提交次数排序
 	$ git shortlog -sn
 
@@ -290,6 +293,9 @@
 	# 下载远程仓库的所有变动
 	$ git fetch [remote]
 
+	# 添加远程仓库 
+	$ git remote add origin git@github.com:github-book/git-tutorial.git
+	
 	# 显示所有远程仓库
 	$ git remote -v
 
