@@ -1,0 +1,3 @@
+面试题： 
+1、面试题类型 redis：https://blog.csdn.net/Butterfly_resting/article/details/89668661
+2、30道Redis面试题：https://www.cnblogs.com/suncloud/p/12640494.html
