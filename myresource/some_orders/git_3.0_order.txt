@@ -121,6 +121,7 @@
 
 	# 删除远程分支
 	$ git push origin --delete [branch-name]
+    $ git push origin :master
 	$ git branch -dr [remote/branch]	
 	
 	# git pull 设置默认分支
@@ -139,6 +140,10 @@
 	# 新建一个tag在当前commit
 	$ git tag [tag]
 
+    # 创建一个带注解的标签 
+    # -a 选项意为"创建一个带注解的标签"。 不用 -a 选项也可以执行的，但它不会记录这标签是啥时候打的，谁打的，也不会让你添加个标签的注解
+    $ git tag -a v1.0 
+    
 	# 新建一个tag在指定commit
 	$ git tag [tag] [commit]
 
@@ -302,6 +307,9 @@
 	# 显示某个远程仓库的信息
 	$ git remote show [remote]
 
+    # 删除远程仓库可以使用命令：
+    $ git remote rm [别名]
+
 	# 增加一个新的远程仓库，并命名
 	$ git remote add [shortname] [url]
 	
@@ -334,7 +342,7 @@
 	
 	## git reset命令既可以回退版本，也可以把暂存区的修改回退到工作区。
 	
-	#可以把暂存区的修改撤销掉（unstage），重新放回工作区
+	# 可以把暂存区的修改撤销掉（unstage），重新放回工作区
 	$ git reset HEAD <file>
 	
 	# 重置暂存区的指定文件，与上一次commit保持一致，但工作区不变
