@@ -181,8 +181,11 @@
 	
 	# 如果嫌输出信息太多，看得眼花缭乱的，可以试试加上--pretty=oneline参数
 	$ git log --pretty=oneline
+    
+    # 只显示提交信息的第一行
+	$ git log --pretty=short
 	
-	# 显示过去5次提交
+    # 显示过去5次提交
 	$ git log -5 --pretty --oneline
 	
 	# 显示commit历史，以及每次commit发生变更的文件
@@ -201,8 +204,11 @@
 	$ git log --follow [file]
 	$ git whatchanged [file]
 
-	# 显示指定文件相关的每一次diff
+	# 显示指定文件相关的每一次diff  显示文件的改动
 	$ git log -p [file]
+
+    # 只显示指定目录、文件的日志
+    $ git log README.md
 
 	# 分支的合并后显示log
 	$ git log --oneline --graph --decorate
@@ -327,6 +333,7 @@
 
 	# 推送所有分支到远程仓库
 	$ git push [remote] --all	
+    
 撤销	
 	# 恢复暂存区的指定文件到工作区
 	$ git checkout [file]

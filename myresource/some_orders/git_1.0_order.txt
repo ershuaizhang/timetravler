@@ -90,7 +90,9 @@ Git 工作区、暂存区和版本库
 	$ git config [--global] user.name "[name]"
 	$ git config [--global] user.email "[email address]"
 	
-
+    # 提高命令输出的可读性
+    $ git config --global color.ui auto
+    
 将自己的公钥配置得到网站中
 
     # 使用以下命令生成SSH Key：

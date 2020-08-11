@@ -51,4 +51,33 @@
 3、登录github网站时报超时解决方法
 	选择相应快的DNS服务器添加到 C:\Windows\System32\drivers\etc\hosts 即可
 	https://blog.csdn.net/qq_30460905/article/details/80205636
+    
+# GitHub begin
+140.82.114.4 github.com 
+140.82.112.10 codeload.github.com
+140.82.113.3 github.com
+140.82.114.4 gist.github.com
+185.199.110.153 assets-cdn.github.com
+199.232.68.133 raw.githubusercontent.com
+199.232.68.133 gist.githubusercontent.com
+199.232.68.133 cloud.githubusercontent.com
+199.232.68.133 camo.githubusercontent.com
+199.232.69.194 github.global.ssl.fastly.net
+199.232.68.133 avatars0.githubusercontent.com
+199.232.68.133 avatars1.githubusercontent.com
+199.232.68.133 avatars2.githubusercontent.com
+199.232.68.133 avatars3.githubusercontent.com
+199.232.68.133 avatars4.githubusercontent.com
+199.232.68.133 avatars5.githubusercontent.com
+199.232.68.133 avatars6.githubusercontent.com
+199.232.68.133 avatars7.githubusercontent.com
+199.232.68.133 avatars8.githubusercontent.com
+140.82.114.6 api.github.com
+140.82.114.25 live.github.com
+185.199.110.153 http://documentcloud.github.com
+140.82.113.9 http://nodeload.github.com
+199.232.68.133 http://raw.github.com
+52.205.36.92 http://status.github.com
+140.82.112.18 http://training.github.com
+# GitHub End
 			
