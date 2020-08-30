@@ -17,21 +17,13 @@ cnpm install -g @vue/cli
 # 安装 webpack 打包工具
 cnpm install -g webpack
 
-
 启动图形化管理界面 进行项目的创建  不一定都能弹出来
 vue ui 
-
-
-
-
 
 # 更新升级 npm
 npm install -g npm  || cnpm install -g cnpm
 # 升级或安装 cnpm
 npm install cnpm -g
-
-
-
 
 # 最新稳定版
 $ npm install vue

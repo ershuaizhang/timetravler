@@ -1,4 +1,84 @@
-﻿angularjs和vuejs的区别
+﻿https://www.xttblog.com/?p=848
+https://www.xttblog.com/?p=850
+https://www.xttblog.com/?p=852
+https://www.xttblog.com/?p=854
+https://www.xttblog.com/?p=856
+https://www.xttblog.com/?p=858
+
+============================AngularJS begin============================
+AngularJS 是一个 JavaScript 框架。它可通过 <script> 标签添加到 HTML 页面。AngularJS 是专门为应用程序设计的 HTML
+
+AngularJS 通过 指令 扩展了 HTML，且通过 表达式 绑定数据到 HTML
+
+
+引入js库
+<script src="http://apps.bdimg.com/libs/angular.js/1.3.9/angular.min.js"></script>
+
+我们建议把脚本放在 <body> 元素的底部。
+ 这会提高网页加载速度，因为 HTML 加载不受制于脚本加载
+
+
+ 
+AngularJS 通过 ng-directives 扩展了 HTML。
+ng-app 指令定义一个 AngularJS 应用程序。
+ng-model 指令把元素值（比如输入域的值）绑定到应用程序。
+ng-bind 指令把应用程序数据绑定到 HTML 视图。
+ng-init 指令初始化 AngularJS 应用程序变量
+
+当网页加载完毕，AngularJS 自动开启。
+ng-app 指令告诉 AngularJS，<div> 元素是 AngularJS 应用程序 的"所有者"。
+ng-model 指令把输入域的值绑定到应用程序变量 name。
+ng-bind 指令把应用程序变量 name 绑定到某个段落的 innerHTML。
+如果您移除了 ng-app 指令，HTML 将直接把表达式显示出来，不会去计算表达式的结果。
+
+HTML5 允许扩展的（自制的）属性，以 data- 开头。
+AngularJS 属性以 ng- 开头，但是您可以使用 data-ng- 来让网页对 HTML5 有效。
+
+
+AngularJS 模块（Module） 定义了 AngularJS 应用。
+AngularJS 控制器（Controller） 用于控制 AngularJS 应用。
+ng-app指令定义了应用, ng-controller 定义了控制器。
+
+
+AngularJS 实例
+
+<div ng-app="myApp" ng-controller="myCtrl">
+ 名: <input type="text" ng-model="firstName"><br>
+ 姓: <input type="text" ng-model="lastName"><br>
+    <br>
+
+ 姓名: {{firstName + " " + lastName}}
+</div>
+<script>
+    // AngularJS 模块定义应用
+    var app = angular.module('myApp', []);
+    // AngularJS 控制器控制应用
+    app.controller('myCtrl', function($scope) {
+        $scope.firstName= "John";
+        $scope.lastName= "Doe";
+    });
+
+</script>
+
+
+
+
+
+<html> 元素包含了 AngularJS 应用 (ng-app=)。
+
+<div> 元素定义了 AngularJS 控制器的作用域 (ng-controller=)。
+
+在一个应用可以由很多控制器。
+
+应用文件(my...App.js) 定义了应用模型代码。
+
+一个或多个控制器文件 (my...Ctrl.js) 定义了控制器代码
+
+
+
+============================AngularJS end!!============================
+
+angularjs和vuejs的区别
 	在 Angular 1 中，当 watcher 越来越多时会变得越来越慢，因为作用域内的每一次变化，所有 watcher 都要重新计算。
 	并且，如果一些 watcher 触发另一个更新，脏检查循环（digest cycle）可能要运行多次。Angular 用户常常要使用深奥的技术，
 	以解决脏检查循环的问题。有时没有简单的办法来优化有大量 watcher 的作用域。

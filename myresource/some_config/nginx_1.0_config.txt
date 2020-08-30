@@ -1,0 +1,167 @@
+﻿
+配置文件解析：
+
+
+########### 每个指令必须有分号结束。#################
+#user administrator administrators;  #配置用户或者组，默认为nobody nobody。
+#worker_processes 2;  #允许生成的进程数，默认为1
+#pid /nginx/pid/nginx.pid;   #指定nginx进程运行文件存放地址
+error_log log/error.log debug;  #制定日志路径，级别。这个设置可以放入全局块，http块，server块，级别以此为：debug|info|notice|warn|error|crit|alert|emerg
+events {
+    accept_mutex on;   #设置网路连接序列化，防止惊群现象发生，默认为on
+    multi_accept on;  #设置一个进程是否同时接受多个网络连接，默认为off
+    #use epoll;      #事件驱动模型，select|poll|kqueue|epoll|resig|/dev/poll|eventport
+    worker_connections  1024;    #最大连接数，默认为512
+}
+http {
+    include       mime.types;   #文件扩展名与文件类型映射表
+    default_type  application/octet-stream; #默认文件类型，默认为text/plain
+    #access_log off; #取消服务日志    
+    log_format myFormat '$remote_addr–$remote_user [$time_local] $request $status $body_bytes_sent $http_referer $http_user_agent $http_x_forwarded_for'; #自定义格式
+    access_log log/access.log myFormat;  #combined为日志格式的默认值
+    sendfile on;   #允许sendfile方式传输文件，默认为off，可以在http块，server块，location块。
+    sendfile_max_chunk 100k;  #每个进程每次调用传输数量不能大于设定的值，默认为0，即不设上限。
+    keepalive_timeout 65;  #连接超时时间，默认为75s，可以在http，server，location块。
+
+    upstream mysvr {   
+      server 127.0.0.1:7878;
+      server 192.168.10.121:3333 backup;  #热备
+    }
+    error_page 404 https://www.baidu.com; #错误页
+    server {
+        keepalive_requests 120; #单连接请求上限次数。
+        listen       4545;   #监听端口
+        server_name  127.0.0.1;   #监听地址       
+        location  ~*^.+$ {       #请求的url过滤，正则匹配，~为区分大小写，~*为不区分大小写。
+           #root path;  #根目录
+           #index vv.txt;  #设置默认页
+           proxy_pass  http://mysvr;  #请求转向mysvr 定义的服务器列表
+           deny 127.0.0.1;  #拒绝的ip
+           allow 172.18.5.54; #允许的ip           
+        } 
+    }
+}
+
+
+===========================================通用配置项=====================================================================
+通用配置项
+Nginx安装与配置
+配置选项 说明
+—prefix= nginx安装的根路径， 所有其他的路径都要依赖与该选项
+-—sbin-path= nginx二进制文件的路径， 如果没有指定则会依赖于—prefix
+—conf-path= 如果在命令行中没有指定配置文件， 则通过该配置项去查找配置文件
+—error-log-path= 指定错误文件的路径
+—pid-path= 指定的文件将会写入nginx master进程的pid， 通常在/var/run下
+—lock-path= 共享存储器互斥锁文件的路径
+—user= worker进程运行的用户
+—group= worker进程运行的组
+—with-file-aio 启动异步I/O
+—with-debug 启用调试日志， 生产环境不推荐配置
+===========================================优化配置项============
+
+配置选项 说明
+—with-cc= 如果想设置一个不在默认PATH下的C编译器
+—with-cpp= 设置C预处理器的相应路径
+—with-cc-opt= 指定必要的include文件路径
+—with-ld-opt= 包含连接器库的路径和运行路径
+—with-cpu-opt= 通过该选项为特定的CPU构建nginx
+
+===========================================http模块配置项=========
+
+配置选项 说明
+—without-http-cache 在使用upstream模块时， nginx能够配置本地缓存内容， 该选项可以禁用缓存
+—with-http_perl_module nginx配置能够扩展使用perl代码。 该项启用这个模块， 但会降低性能
+—with-perl_modules_path= 对于额外嵌入的perl模块， 该选项指定该perl解析器的路径
+—with-perl= 如果在默认的路径中找不到perl则指定perl（ 5.6版本以上） 的路径
+—http-log-path= http访问日志的默认路径
+—http-client-body-temppath= 从客户端收到请求后， 该项用于作为请求体临时存放的目录
+—http-proxy-temp-path= 在使用代理后， 通过该项设置存放临时文件路径
+—http-fastcgi-temp-path= 设置FastCGI临时文件的目录
+—http-uwsgi-temp-path= 设置uWSGI临时文件的目录
+—http-scgi-temp-path= 设置SCGI临时文件的目录
+
+
+
+
+配置说明
+
+main模块
+1. #main模块类似main函数包含其他子模块， 非模块配置项(包括模块内)分号结尾， 子模块配置花括号结尾
+2. user nobady; #一般按默认设置
+3. pid /var/run/nginx.pid; #进程标识符存放路径， 一般按默认设置
+4. worker_processes auto; #nginx对外提供web服务时的worder进程数， 可将其设置为可用的CPU内核数， auto为自动检测
+5. worker_rlimit_nofile 100000; # 更改worker进程的最大打开文件数限制
+6. error_log logs/error.log info; #错误日志存放路径
+7. keepalive_timeout 60; #keepalive_timeout 60;
+8. events{
+9. #见events模块
+10. }
+11. http{ #见http模块
+12. server{
+13. ...
+14. location /{
+15.
+16. }
+17. }
+18. }
+19. mail{
+20. #见mail模块
+21. }
+
+events模块
+1. events {
+2. worker_connections 2048; #设置可由一个worker进程同时打开的最大连接数
+3. multi_accept on; #告诉nginx收到一个新连接通知后接受尽可能多的连接
+4. use epoll; #设置用于复用客户端线程的轮询方法。 Linux 2.6+： 使用epoll； *BSD： 使用kqueue。
+5. }
+
+http模块
+1. http { #http模块
+2. server { #server模块， http服务上的虚拟主机， server 当做对应一个域名进行的配置
+3. listen 80; #配置监听端口
+4. server_name www.linuxidc.com; #配置访问域名
+5. access_log logs/linuxidc.access.log main; #指定日志文件的存放路径
+6. index index.html; #默认访问页面
+7. root /var/www/androidj.com/htdocs; # root 是指将本地的一个文件夹作为所有url 请求的根路径
+8. upstream backend { #反向代理的后端机器， 实现负载均衡
+9. ip_hash; #指明了我们均衡的方式是按照用户的 ip 地址进行分配
+10. server backend1.example.com;
+11. server backend2.example.com;
+12. server backend3.example.com;
+13. server backend4.example.com;
+14. }
+15. location / { #location 是在一个域名下对更精细的路径进行配置
+16. proxy_pass http://backend; #反向代理到后端机器
+17. }
+18. }
+19.
+20. server {
+21. listen 80;
+22. server_name www.Androidj.com;
+23. access_log logs/androidj.access.log main;
+24. location / {
+25. index index.html;
+26. root /var/www/androidj.com/htdocs;
+27. }
+28. }
+29. }
+
+mail模块
+1. mail {
+2. auth_http 127.0.0.1:80/auth.php;
+3. pop3_capabilities "TOP" "USER";
+4. imap_capabilities "IMAP4rev1" "UIDPLUS";
+5.
+6. server {
+7. listen 110;
+8. protocol pop3;
+9. proxy on;
+10. }
+11. server {
+12. listen 25;
+13. protocol smtp;
+14. proxy on;
+15. smtp_auth login plain;
+16. xclient off;
+17. }
+18. }

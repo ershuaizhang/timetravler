@@ -1,0 +1,33 @@
+﻿常用命令
+
+## 查看 Nginx 程序文件目录:/usr/sbin/nginx
+$ ps  -ef | grep nginx
+
+## 查看 nginx.conf 配置文件目录:/etc/nginx/nginx.conf
+$ nginx -t                 
+$ vim /etc/nginx/nginx.conf
+
+## 配置文件目录：/etc/nginx
+
+## 虚拟主机配置文件目录：/etc/nginx/sites-available/
+## 虚拟主机文件夹目录：/var/www/，详情可在 /etc/nginx/sites-available/ 中配置
+## 默认网页文件目录：/usr/share/nginx/html
+
+## 测试配置文件，只检查配置文件是否存在语法错误
+$ nginx -t -c <path-to-nginx.conf>
+$ sudo nginx -t -c /etc/nginx/nginx.conf
+
+## 启动 Nginx 服务
+$ nginx 安装目录 -c <path-to-nginx.conf>
+$ sudo /etc/init.d/nginx start
+
+## 停止 Nginx 服务
+$ sudo /usr/sbin/nginx -s stop 
+
+## 重启 Nginx 
+$ sudo /usr/sbin/nginx -s reload  # 0.8 版本之后的方法
+$ kill -HUP pid     # 向 master 进程发送信号从容地重启 Nginx，即服务不中断
+
+$ sudo service nginx start
+$ sudo service nginx stop
+$ sudo service nginx restart

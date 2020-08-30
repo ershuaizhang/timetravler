@@ -2,4 +2,17 @@
 	在controller里面的接口上面加,produces="text/html;charset=UTF-8"即可
 	@RequestMapping(value = "/addLjlUsrServiceManInfoOne" ,produces="text/html;charset=UTF-8")
 	
-	
+2、SpringBoot Controller接收参数的几种常用方式
+    第一类：请求路径参数
+        1、@PathVariable
+        获取路径参数。即url/{id}这种形式。
+
+        2、@RequestParam
+        获取查询参数。即url?name=这种形式
+        
+	第二类：Body参数
+        @RequestBody
+        
+    第三类：请求头参数以及Cookie    
+        1、@RequestHeader
+        2、@CookieValue

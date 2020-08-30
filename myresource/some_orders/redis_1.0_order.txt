@@ -330,7 +330,11 @@ Redis 服务器命令
         用于复制功能(replication)的内部命令
 
 
-
+常用命令：：
+$ wget   下载
+$ tar    压缩解压
+$ make   创建
+ 
 
 
 

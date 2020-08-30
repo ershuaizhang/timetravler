@@ -1,4 +1,31 @@
-﻿wiki：
+﻿============================================linux_order======================================================================
+#查看自己的用户名：
+$ who am i
+
+#创建文件
+$ touch filename
+
+#编辑
+$ vi filename
+
+#查看 
+$ cat filename
+
+#复制 
+$ cp filename copyfile
+
+#重命名 
+$ mv filename newfile
+
+#删除 
+$ rm filename filename2
+
+#统计词数 
+$ wc filename
+
+=============================================================================================================================
+
+wiki：
 	https://www.cnblogs.com/act123/archive/2011/08/22/2148819.html
 	
 Route：
@@ -367,6 +394,38 @@ vi 是基于行的一个编辑器
 20．关闭指定进程taskkill
 
 
+21. 暂停 pause
+
+
+cls ：
+    清除屏幕内容
+
+dir ：
+    显示当前磁盘目录下的所有文件
+
+copy ：
+    拷贝
+
+ren / rename ：
+    重命名
+
+del / erase ：
+    删除目录中的文件
+
+date :
+    设定系统日期
+
+time ：
+    设定系统时间
+
+ver ：
+    显示当前DOS的版本号
+
+vol ：
+    显示磁盘名字
+
+checkdsk ：
+    检查磁盘目录以及文件信息
 
 		
 		
