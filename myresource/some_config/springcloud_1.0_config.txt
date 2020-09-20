@@ -64,10 +64,7 @@ fallbackFactory: 工厂类，用于生成fallback类示例，通过这个属性�
 @WebAppConfiguration 开启Web 应用的配置，用于模拟ServletContext
 @RibbonClient，这个注解用来为负载均衡客户端做一些自定义的配置，可以进一步配置或自定义从哪里获取服务端列表、负载均衡策略、Ping也就是服务鉴活策略等等
 
-
 ===============================================maven===============================================
-
-
 maven 部分
 
 <dependencyManagement>
@@ -85,40 +82,698 @@ maven 部分
 https://blog.csdn.net/varyall/article/details/82085313
 https://how2j.cn/k/springcloud/springcloud-intro/2035.html
 ===============================================注册  中心===============================================
-想将一个微服务注册到Eureka Server（或其他服务发现组件，例如Zookeeper、Consul等），Eureka 2.0闭源之后，Consul慢慢会成为主流。
+springCloud 支持最好的是Eureka 其次是 Consul 最后是Zookpeeper
+    想将一个微服务注册到Eureka Server（或其他服务发现组件，例如Zookeeper、Consul等），Eureka 2.0闭源之后，Consul慢慢会成为主流。
+        
+        添加Eureka Client（或其他服务发现组件的Client）依赖：
+        <dependency>
+          <groupId>org.springframework.cloud</groupId>
+          <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+        <!-- Spring  Cloud  --> 
+        <dependencyManagement> 
+            <dependencies> 
+                <dependency> 
+                    <groupid>org.springframework.cloud</groupId>
+                    <artifactid>spring-cloud-dependencies</ artifactid> 
+                    <version>Dalston.SR4</version> 
+                    <type>pom</type> 
+                    <scope>import</scope> 
+                </dependency> 
+            </dependencies> 
+        </dependencyManagement> 
+    从Spring Cloud Edgware开始，@EnableDiscoveryClient 或@EnableEurekaClient (可省略)。
+    只需加上相关依赖，并进行相应配置，即可将微服务注册到服务发现组件上。
+            写注解：在启动类上添加注解@EnableDiscoveryClient 或@EnableEurekaClient
+            @EnableEurekaClient
+            @SpringBootApplication
+            public class ProviderUserApplication {
+              public static void main(String[] args) {
+                SpringApplication.run(ProviderUserApplication.class, args);
+              }
+            }
+            
+            写配置：
+            spring:
+              application:
+                name: microservice-provider-user
+              port: 8761  
+            eureka:
+              instance:
+                hostname: localhost
+              client:
+                enableSelfPreservation: false  将自我保护模式关闭  保护模式主要用于一组客户端和 Eureka Server 之间存在网络分区场景时 。 一旦进入保护模式， Eureka Server 将会尝试保护其服务的注册表中的信息，不再删除服务注册表中的数据。 当网络故障恢复后，该 Eure ka Server 节点会自动退出保护模式。
+               .evi ction-interval-tirner-in-ms: SOOO  和清理间隔 ＃ 默认 6000 0 毫秒
+                registry-fetch-interval-seconds: 30 Eureka Server上则会维护一份只读的服务清单来返回给客户端，这个服务清单并不是实时数据，而是一份缓存数据，默认30秒更新一次，如果想要修改清单更新的时间间隔
+                fetch-registry: false  由于注册中心的职责就是维护服务实例 ， 他并不需要去检索服务，所以也设置为 false
+                register­with-eureka: false  由于该应用为注册中心，所以设置为 false ， 代表不向汪册中心注册自己 ，不然启动时会把自己当作客户端向自己注册，会报错
+                serviceUrl:
+                  defaultZone: http://localhost:8761/eureka/   在url中看到注册中心的地址
+                  
+        @EnableDiscoveryClient 和@EnableEurekaClient 共同点就是：都是能够让注册中心能够发现，扫描到改服务。
+        不同点：@EnableEurekaClient 只适用于Eureka作为注册中心，@EnableDiscoveryClient 可以是其他注册中心
+
+
+多中心配置  Eureka 高可用搭建
+    假设我们有 master 和 slaveone 两台机器，
+        需要做的就是 ：
+            ·将 master 注册到 slaveone 上面。
+            ．将 slaveone 注册到 master 上面。
+        如果是 3 台机器，以此类推：
+            ·将 master 注册到 slaveone 和 slavetwo 上面 。
+            ·将 slaveone 注册到 master 和 slavetwo 上面 。
+            ·将 slavetwo 注册到 master 和 slaveone 上面。
+
+    先描述一个场景：首先我有两个服务注册中心（相互注册），地址分别是http://localhost:1111和http://localhost:1112，
+    然后我还有两个服务提供者，地址分别是http://localhost:8080和http://localhost:8081，
+    然后我将8080这个服务提供者注册到1111这个注册中心上去，将8081这个服务提供者注册到1112这个注册中心上去，
+    此时我在服务消费者中如果只向1111这个注册中心去查找服务提供者，那么是不是只能获取到8080这个服务而获取不到8081这个服务？
     
-    添加Eureka Client（或其他服务发现组件的Client）依赖：
-    <dependency>
-      <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-    </dependency>
+    答案是服务消费者可以获取到两个服务提供者提供的服务。
+    虽然两个服务提供者的信息分别被两个服务注册中心所维护，但是由于服务注册中心之间也互相注册为服务，当服务提供者发送请求到一个服务注册中心时，
+    它会将该请求转发给集群中相连的其他注册中心，从而实现注册中心之间的服务同步，
+    通过服务同步，两个服务提供者的服务信息我们就可以通过任意一台注册中心来获取到
     
-从Spring Cloud Edgware开始，@EnableDiscoveryClient 或@EnableEurekaClient(可省略)。
-只需加上相关依赖，并进行相应配置，即可将微服务注册到服务发现组件上。
-        写注解：在启动类上添加注解@EnableDiscoveryClient 或@EnableEurekaClient
-        @EnableDiscoveryClient
+    两个中心 （可以是一个工程两个配置文件 启动时启动不同的配置文件） 
+        创建了application-peer1.properties和application-peer2.properties配置文件，如下：
+            application-peer1.properties:
+                spring.application.name=eureka-server
+                server.port=1111
+                eureka.instance.hostname=peer1
+                eureka.client.register-with-eureka=true
+                eureka.client.service-url.defaultZone=http://peer2:1112/eureka/
+                
+            application-peer2.properties:
+                spring.application.name=eureka-server
+                server.port=1112
+                eureka.instance.hostname=peer2
+                eureka.client.register-with-eureka=true
+                eureka.client.service-url.defaultZone=http://peer1:1111/eureka/
+
+            命令启动 服务 java -jar 打好的jar包全名 --spring.profiles.active=peer2  
+
+    两个服务提供者  （可以是一个工程两个配置文件 启动时启动不同的配置文件） 
+        provider工程也创建两个配置文件，分别为application-p1.properties和application-p2.properties，内容如下：
+
+        application-p1.properties:
+            spring.application.name=hello-service
+            server.port=8080
+            eureka.client.service-url.defaultZone=http://peer1:1111/eureka
+
+        application-p2.properties:
+            spring.application.name=hello-service
+            server.port=8081
+            eureka.client.service-url.defaultZone=http://peer2:1112/eureka
+    
+        命令启动 服务 java -jar 打好的jar包全名 --spring.profiles.active=p1  
+
+    我们将8080这个服务注册到1111这个服务注册中心上去了，将8081这个服务注册到1112这个服务注册中心上去了
+
+
+开启 Eureka 认证
+    添加pom依赖
+        <dependency> 
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency> 
+    修改配置
+            application.properties 中加上认证的配置信息：
+            security.basic.enabled=true  ＃开启 认证
+            security.user.name=yinjihuan  ＃ 用户名
+            security.user.password=123456  ＃ 密码
+
+    重新启动注册中心，访问 http: // localhost:8761/ ，此时浏览器会提示你输入用户名和密码，输入正确后才能继续访问 Eureka 提供的管理页面 。
+        在 Eureka 开启认证后，客户端注册的配置也要加上认证的用户名和密码信息：
+        eureka.client.serviceUrl.defaultZone= http://yinjihuan:123456@localhost:8761/eureka/ 
+
+
+自定义 Eureka 的 Instance ID
+    客户端在注册时，服务的 Instance ID 的默认值的格式如下：
+    ${spring.cloud.client.hostname ｝：$｛ spring.application.name ｝：$｛ spring.application.instance  id:${server.port}} 
+    翻译过来就是“主机名：服务名称：服务端口” 。 
+    当我们在 Eureka 的 Web 控制台查看服务注册信息的时候，就是这样的一个格式： user-PC :fsh-house:  8081 。
+
+    很多时候我们想把 IP 显示在上述格式中，此时，只要把主机名替换成 IP 就可以了，或者调整顺序也可以 。
+    可以改成下面的样子，用“服务名称：服务所在 IP ：服务端口”的格式来定义：
+    eureka.instance.instance-id=${spring.application.name}:${spring.cloud.client.ipAddress ｝：$｛ spring.application.instance  id ：$｛ server.port}}
+
+
+服务上下线监控
+    在某些特定的需求下，我们需要对服务 的上下线进行监控，上线或下线都进行邮件通知， Eureka 中提供了事件监听的方式来扩展 。
+    目前支持的事件如下：
+    •  EurekainstanceCanceledEvent 服务下线事件。
+    •  EurekalnstanceRegisteredEvent 服务注册事件。
+    •  EurekalnstanceRenewedEvent 服务续约事件。
+    •  EurekaRegistryAvailableEvent  Eureka 注册中心启动事件。
+    •  EurekaServerStartedEvent Eureka  Server 启动事件。
+    
+    基于 Eureka 提供的事件机制，可以监控服务的上下线过程，在过程发生 中可以发送邮件来进行通知 。 
+    下面的代码只是演示了监控的过程， 并未发送邮件。
+    @Component 
+    public  class  EurekaStateChangeListener  { 
+        @EventListener 
+        public  void  listen(EurekaInstanceCanceledE ven t event)  { 
+            System.err.println(event.getServerid()  +”\t"  + event.getAppName ( )  ＋” 服务下 线 ”）；
+        }
+        @EventListener 
+        public  void  listen(EurekainstanceRegisteredEvent  event)  { 
+            Instanceinfo instanceinfo  =  event.getinstanceinfo(); 
+            System.err.println(instanceinfo.getAppName()  ＋” 进行注册 ”）；
+        }
+        @EventListener 
+        public  void  lIsten(EurekainstanceRenewedE v ent event)  { 
+            System.err.println(event.getServerid()  +  " \ t ”+ event.getAppName ( )  ＋” 服务进行续约 ”）；
+        }
+        @EventListener 
+        public  void  listen(EurekaRegistryAvail ableEvent  event)  { 
+            System.err.println （” 注册中心启动 ”）；
+        }
+        @EventListener 
+        public  void  listen(EurekaServerStartedEvent  event)  { 
+            System.err.printl n (”Eureka  Server 启动 ”）；
+        }
+    }
+
+
+
+
+
+    
+===============================================服务提供者===============================================
+现将一个服务提供者service 注册到 Eureka 中
+
+maven 
+    <dependencies> 
+        <!-- eureka  --> 
+        <dependency> 
+            <groupId>org.springframework.cloud</groupid>
+            <artifactid>spring- cloud-starter-eureka</artifactid> 
+        </dependency> 
+    </dependencies> 
+    依赖管理部分同上。。。
+
+启动类
+        @EnableDiscoveryClient 这个表示当前服务是一个 Eureka 的客户端。
         @SpringBootApplication
-        public class ProviderUserApplication {
+        public class Application {
           public static void main(String[] args) {
-            SpringApplication.run(ProviderUserApplication.class, args);
+            SpringApplication.run(Application.class, args);
           }
         }
-        
-        写配置：
-        spring:
-          application:
-            name: microservice-provider-user
-        eureka:
-          client:
-            serviceUrl:
-              defaultZone: http://localhost:8761/eureka/
-              
-@EnableDiscoveryClient和@EnableEurekaClient共同点就是：都是能够让注册中心能够发现，扫描到改服务。
-不同点：@EnableEurekaClient只适用于Eureka作为注册中心，@EnableDiscoveryClient 可以是其他注册中心
+    
+配置：
+    在 src/main/resources 下面创建一个 application.properties 属性文件，增加下面的
+    配置：
+        spring.appl 工cation.name=fsh-house
+        server.port=8081 
+        eureka.client.serviceUrl.defaultZone=http://localhost:8761/eureka/   上面注册中心的地址
+        # 在注册完服务之后，服务提供者会维护一个心跳来不停的告诉Eureka Server：“我还在运行”，
+        # 以防止Eureka Server将该服务实例从服务列表中剔除，这个动作称之为服务续约，和服务续约相关的属性有两个
+        eureka.instance.lease-expiration-duration-in-seconds=90   配置用来定义服务失效时间，默认为90秒
+        eureka.instance.lease-renewal-interval-in-seconds=30  用来定义服务续约的间隔时间，默认为30秒。
 
 
-===============================================服务提供者===============================================
+eureka.client.serviceUrl.defaultZone 的地址就是我们之前启动的 Eureka 服务的地址，在启动的时候需要将自身的信息注册到 Eureka 中去 
+
+
+提供一个服务demo：
+    @RestController 
+    @RequestMapping (”/house ”) 
+    public  class  HouseController  { 
+        @GetMapping (”/hello ”) 
+        public  String  hello()  { 
+            return ”Hello ”; 
+        }
+    }
+    
+    http://localhost : 8081 / house/hello     就是 OK的 
+    
 ===============================================服务消费者===============================================
-===============================================熔  断  器===============================================
-===============================================网关控制器===============================================
-===============================================负载  均衡===============================================
+来一个来消费者工程  消费我们刚刚写的 house/ hello 接口
+
+RestTemplate 是 Spring 提供的用于访问 Rest 服务的 客户端， RestTemplate 提供了
+多种便捷访 问远程 Http 服 务的方法，能够大大提高客户端的编写效率
+
+maven：
+    正常的maven配置
+    
+配置文件：
+    app lic ation.properties 文件中的配置信息 ：
+    spring.application.name=fsh-substitution 
+    server.port=8082 
+
+正常的使用接口直接调用
+    消费服务类：
+        @RestController 
+        @RequestMapping (” / substitution”) 
+        public  class  SubstitutionController  { 
+            @Autowired 
+            private  RestTemplate  restTemplate; 
+            
+            @GetMapping (” / callHello”} 
+            public  String  callHello()  { 
+                return  restTemplate.getForObject("http://localhost:8081/house/hello ”, String.class) ; 
+            }
+        }
+         // 抽出来
+        @Configuration 
+        public  class  BeanConfiguration  { 
+            @Bean 
+            public  RestTemplate  getRestTemplate()  { 
+                return  new  RestTemplate(); 
+            }
+        }
+
+        http://localhost: 8082/substitution/ callHello 若是这个 连接能直接调通  说明直接通过接口调用是ok的
+
+
+通过 Eureka 来消费接口
+    消费服务类： 
+    改造调用代码，我们不再直接写固定地址， 而是写成服务的名称，这个名称也就是我们注册到 Eureka 中的名称 ， 是属性文件中的 spr ing.application.name
+        @RestController 
+        @RequestMapping (” / substitution”) 
+        public  class  SubstitutionController  { 
+            @Autowired 
+            private  RestTemplate  restTemplate; 
+            
+            @GetMapping (” / callHello”} 
+            public  String  callHello()  { 
+                return  restTemplate.getForObject("http://fsh-house/house/hello ”, String.class) ; 
+            }
+        }
+         // 抽出来
+        @Configuration 
+        public  class  BeanConfiguration  { 
+            @Bean 
+            @LoadBalanced  这个注解会自动构造 LoadBalancerClient 接口的实现类并注册到 Spring 容器中， 实现负载均衡
+            public  RestTemplate  getRestTemplate()  { 
+                return  new  RestTemplate(); 
+            }
+        }
+
+        http://localhost: 8082/substitution/ callHello 若是这个 连接能直接调通  说明直接注册中心调用是ok的
+
+
+
+
+==============================================Hystrix熔断器==============================================
+Hystrix：
+在 Spring Cloud 中使用 Hystrix
+
+    <!--	整合hystrix	-->
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-hystrix</artifactId>
+    </dependency>
+    
+使用@EnableCircuitBreaker注解开启断路器功能
+
+    /**
+        *	使用@EnableCircuitBreaker注解开启断路器功能  
+            在启动类上添加＠EnableHystrix 或者＠EnableCircuitBreaker 。
+            注意，＠EnableHystrix中包含了＠EnableCircuitBreaker 。
+        *	@author	eacdy
+        */
+    @SpringBootApplication
+    @EnableDiscoveryClient
+    @EnableCircuitBreaker
+    public	class	MovieRibbonHystrixApplication	{
+        /**
+            *	实例化RestTemplate，通过@LoadBalanced 注解开启均衡负载能力.
+            *	@return	restTemplate
+            */
+        @Bean
+        @LoadBalanced
+        public	RestTemplate	restTemplate()	{
+            return	new	RestTemplate();
+        }
+        public	static	void	main(String[]	args)	{
+            SpringApplication.run(MovieRibbonHystrixApplication.class,	args);
+        }
+    }
+    
+使用@HystrixCommand 注解指定当该方法发生异常时调用的方法    
+    @Service
+    public	class	RibbonHystrixService	{
+        @Autowired
+        private	RestTemplate	restTemplate;
+        private	static	final	Logger	LOGGER	=	LoggerFactory.getLogger(RibbonHystrixService.class);
+        /**
+            *	使用@HystrixCommand注解指定当该方法发生异常时调用的方法
+            *	@param	id	id
+            *	@return	通过id查询到的用户
+            */
+        @HystrixCommand(fallbackMethod	=	"fallback")
+        @GetMapping (”/findById”) 
+        public	User	findById(Long	id)	{
+                return	this.restTemplate.getForObject("http://microservice-provider-user/"	+	id,	User.class);
+        }
+        /**
+            *	hystrix	fallback方法
+            *	@param	id	id
+            *	@return	默认的用户
+            */
+        public	User	fallback(Long	id)	{
+                RibbonHystrixService.LOGGER.info("异常发生，进入fallback方法，接收的参数：id	=	{}",	id);
+                User	user	=	new	User();
+                user.setId(-1L);
+                user.setUsername("default	username");
+                user.setAge(0);
+                return	user;
+        }
+    }
+    
+    
+配置描述：
+        HystrixCommand 中除了 fallbackMethod 还有很多的配置，下面我们来看看这些配置：
+        •  hystrix.command.default.execution.isolation.strategy ：
+            该配置用来指定隔离策略，具体策略有下面 2 种 。
+                •  THREAD ：线程隔离，在单独的线程上执行，并发请求受线程池大小的控制 。
+                •  SEMAPHORE ：信号量隔离，在调用线程上执行，并发请求受信号量计数器的限制 。
+        •  hystrix.command.default.execution.isolation.thread.timeoutlnMilliseconds ： 
+            该配置用于 Hystrix Command 执行的超时时间设置，当 HystrixCommand 执行的时间超过了该
+            配置所设置的数值后就会进入服务降级处理，单位是毫秒，默认值为 1000 。
+        •  hystrix.command.default.execution.timeout.enabled ： 
+            该配置用于确定是否启用 execution.isolation.thread.timeoutlnMilliseconds 设置的超时时间，默认值为 true 。 设
+            置为 false 后 exe cution.isolation.thread.timeoutinMilliseconds 配置也将失效。
+        •  hystrix.command.default.execution.iso la ti on.thread.interruptOn Timeout ： 
+            该配置用于确定 HystrixCommand 执行超时后是否需要中断它，默认值为 true 。
+        •  hystrix.command.default.execution.isolation.thread.interruptOnCancel ：
+            该配置用于确定 HystrixCommand 执行被取消时是否需要中断它，默认值为 fa lse 。
+        •  hystrix.command.default.execution.isolation.semaphore.maxConcurrentRequests ： 
+            该配置用于确定 Hystrix 使用信号量策略时最大的并发请求数。
+        •  hystrix.command.default.fa] !back.isolation.semaphore.max Concurren tRequests ： 
+            该配置用于如果并发数达到该设置值，请求会被拒绝和抛出异常并且 fall back 不会被调用，默认值为 10 。
+        •  hystrix.command.default.fal !back.enabled ： 
+            该配置用于确定当执行失败或者请求被拒绝时，是否会尝试调用 hystrixCommand.getFallback （），默认值为 true 。
+        •  hystrix.command.default.circuitBreaker.enabled ： 
+            该配置用来跟踪 circuit 的健康性，如果未达标则让 request 短路，默认值为 true 。
+        •  hystrix.command.default.circuitBreaker.requestVolumeThreshold ：
+            该配 置用于设置一个 rolling window 内 最小的请求数。 如果设为 20 ，那么 当一个 rolling window 的时－
+            间内（比如说 l 个 rolling window 是 10 秒）收到 19 个请求， 即使 19 个请求都失败，也不会触发 circuit break ， 默认值为 20 。
+        •  hystrix.command.default.circuitBreak巳r.sleep WindowlnMilliseconds ： 
+            该配置用于设置一个触发短路的时间值，当该值设为 5000 时，则 当触发 circuit break 后的 5000 毫秒
+            内都会拒绝 request ，也就是 5000 毫秒后才会关闭 circuit 。 默认值为 5000 。
+        •  hystrix.command.default.circ 山tBreaker.errorThresholdPercentage ： 
+            该配置用于设置错误率阔值，当错误率超过此值时，所有请求都会触发 fa ll back ，默认值为 50 。
+        •  hystrix.command.default.circuitBreaker.forceOpen ：
+            如果配置为 true ，将强制打开熔断器，在这个状态下将拒绝所有请求，默认值为 false 。
+        •  hystrix.command.default.circuitBreaker.forceClosed ：
+            如果配置为 true ，则将强制关闭熔断器，在这个状态下，不管错误率有多高，都允许请求，默认值为 false 。
+        •  hystrix.command.default.metrics.rollingStats.timelnMilliseconds ： 
+            设置统计的时间窗口值，单位为毫秒。 circuit break 的打开会根据 1 个 rolling window 的统计来计算。
+            若 rolling window 被设为 10 000 毫秒 ， 则 rolling window 会被分成多个 buckets ，每
+            个 bucket 包含 success 、 failure 、 timeout 、 rection 的次数的统计信息。 默 认值为10000 毫秒。
+        •  hystrix.command.defau l t.metrics.rol l ingStats.numBuckets ：
+            设置 一 个 rolling window 被划分的数量，若 numBuckets=l 0 、 rolling window= 10  000 ，那么一个 bucket 的时
+            间即 l 秒。 必须符合 rolling window % numberBuckets == 0 。 默认值为 10 。
+        •  hystrix.command.default.metrics.rollingPercentile.enabled ： 
+            是否开启指标的计算和跟踪，默认值为 true 。
+        •  hystrix.command.default.metrics.rollingPercentile.timelnMilliseconds ：
+            设置 rolling percentile window 的时间， 默认值为 60 000 毫秒。
+        •  hystrix.command.default.metrics.rollingPercentile.numBuckets ：
+            设置 rolling percentile window 的 numberBuckets ，默认值为 6 。
+        •  hystrix.cornrnand.defauIt.metrics.rollingPercentile.bucketSize ：
+            如果 bucket size= 100 、window= IO 秒，若这 10 秒里有 500 次执行，只有最后 100 次执行会被统计到 bucket
+            里去 。 增加该值会增加内存开销及排序的开销 。 默认值为 100 。
+        •  hystrix.command.default.metrics.healthSnapshot.intervallnMilliseconds ：
+            用来计算影响断路器状态的健康快照的间隔等待时间，默认值为 500 毫秒。
+        •  hystrix.command.default.requestCache.enabled ： 
+            是否开启请求缓存功能，默认值为true 。
+        •  hystrix.cornmand.default.requestLog.enabled ：
+            记录日志到 Hys trixRequestLog ， 默认值为 true 。
+        •  hystrix.collapser.default.maxRequestslnBatch ： 
+            单次批处理的最大请求数，达到眩数量触发批处理， 默认为 Integer.MAX_VALUE 。
+        •  hystrix.col Japser.default.timerDelay InMilliseconds ：
+            触发批处理的延迟，延迟也可以为创建批处理的时间与该值的和，默认值为 10 毫秒。
+        •  hystrix.collapser.defauIt.requestCache.enabled ：
+            是否启用对 HystrixCollapser.execute()和 Hystrix Collapser.queue （）的请求缓存 ， 默认值为 true 。
+        •  hystrix.threadpool.default.coreSize ： 
+            并发执行的最大线程数，默认值为 10 。
+        •  hystrix.threadpool.default.maxQueueSize  :  
+            BlockingQueue 的最大队列数。 当设为 － 1时，会使用 SynchronousQueue ；值为正数时， 会使用 LinkedBlcokingQueue 。 该设
+            置只会在初始化时有效，之后不能修改 thread pool 的 queue size 。 默认值为一 1 。
+        •  hystrix.threadpool.default.queueSizeRejectionThreshold ：
+            即使没有达到 maxQueueSize,但若达到 queueSizeRejectionThreshold 该值后，请求也会被拒绝。 因为 maxQueueSize
+            不能被动态修改，而 queueSizeRejectionThreshold 参数将允许我们动态设置该值。 ifmaxQueueSize == -1 ， 该字段将不起作用 。
+        •  hystrix.threadpool.defauIt.keepAliveTimeMinutes ：
+            设置存活时间，单位为分钟 。 如果coreSize 小于 maximumSize ，那么该属性控制一个线程从实用完成到被释放的时间 。
+            默认值为 1 分钟。
+        •  hystrix.threadpoo I.defauIt.allow MaximumsizeToDivergeFrom Coresize ：
+            该属性允许maximumSize 的配置生效。 那么该值可以 等于或高于 c oreSize 。 设置 coreSize 小 于
+            max imum  Size 会创建一个线程池， 该线程池可 以 支持 maxi mumSize 并发，但在相对
+            不活动期 间将 向系统返回线程。 默认值为 false 。
+        •  hystrix.thread pool.default.metrics.rollings tats.tim 巳InMilliseconds ： 
+            设置滚动时间 窗 的时间 ，单位为毫秒， 默认值是 10 000 。
+        •  hystrix.threadpool.d巳fault.metrics.rollingStats.numBuckets ：
+            设置滚动时间 窗划分桶的数量，默认值为 10 。
+
+        官方的配置信息文档请参考 ： https://github.com/Netflix/Hystrix/wiki/Configuration 。
+
+
+Hystrix 监控
+    Hystrix 监控需要两个必备条件
+    maven pom.xml
+        <!-- 必须有 Actuator 的依赖 -->
+        <dependency> 
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency> 
+        <!-- 有 Hystrix 的依赖，Spring Cloud 中必须在启动类中添加＠EnableHystrix 开启Hystrix  -->
+        <dependency> 
+            <groupId>org.springframework.cloud</groupid>
+            <a rtifactId >spring-cloud-starter-hystrix</artifactId>
+        </dependency> 
+
+
+===============================================API网关控制器===============================================
+maven 依赖：
+    <!--加入 Zuul 的依赖-->
+    <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-zuul</artifactId>
+    </dependency>
+    <!--集成 Eureka-->
+    <dependency> 
+        <groupId>org.springframework.cloud</groupid>
+        <artifactId>spring-cloud-starter-eureka</artifactId>
+    </dependency>
+
+    /**
+    *	使用@EnableZuulProxy 注解激活zuul 开启路由代理功能 。
+    *	跟进该注解可以看到该注解整合了@EnableCircuitBreaker、@EnableDiscoveryClient，是个组合注解，目的是简化配置。
+    *	@author	eacdy
+    */
+    @SpringBootApplication
+    @EnableZuulProxy
+    public	class	ZuulApiGatewayApplication	{
+        public	static	void	main(String[]	args)	{
+            SpringApplication.run(ZuulApiGatewayApplication.class,	args);
+        }
+    }
+
+配置文件：application.yml
+    spring:
+        application:
+            name:	microservice-api-gateway
+    server:
+        port:	8050
+    eureka:
+        instance:
+            hostname:	gateway
+        client:
+            serviceUrl:
+                defaultZone:	http://discovery:8761/eureka/     
+                            
+    追加配置文件
+        zuul.routes.cxytiandi.path=/cxytiandi/** 
+        zuul.routes.cxytiandi.url=http://cxytiandi.com/ 
+        通过 zuul.routes 来配置路由转发， cxytiandi 是自定义的名称，当访问 cxytiandi／**开始的地址时，就会跳转到 http: //cxy tiandi.com 上     
+        
+        eureka.client.serviceUrl.defaultZone= 集成 Eureka
+
+
+Zunl 路由设置
+    当 Zuul 集成 E ureka 之后，其实就可以为 Eureka 中所有 的服务进行路 由操作了， 默认的转发规则就是“ API 网 关地址 ＋访问的服务名称 ＋接 口 URI ” 。 
+    在给服务指定名称的时候，应尽量短一点，这样的话我们就可以用默认的路由规则进行请求，不需要为每个服务
+    都定一个路由规则，这样就算新增了服务， API 网关也不用修改和重启了 
+
+
+
+
+=============================================客户端负载均衡=============================================
+客户端负载均衡和服务端负载均衡最大的区别在于服务清单所存储的位置。
+    在客户端负载均衡中，所有的客户端节点都有一份自己要访问的服务端清单，这些清单统统都是从Eureka服务注册中心获取的。
+        在Spring Cloud中我们如果想要使用客户端负载均衡，方法很简单，开启@LoadBalanced注解即可，
+        这样客户端在发起请求的时候会先自行选择一个服务端，向该服务端发起请求，从而实现负载均衡
+    
+    服务端负载均衡又分为两种，一种是硬件负载均衡，还有一种是软件负载均衡。
+        硬件负载均衡主要通过在服务器节点之间安装专门用于负载均衡的设备，常见的如F5。
+        软件负载均衡则主要是在服务器上安装一些具有负载均衡功能的软件来完成请求分发进而实现负载均衡，常见的就是Nginx。
+        
+        无论是硬件负载均衡还是软件负载均衡都会维护一个可用的服务端清单，
+        然后通过心跳机制来删除故障的服务端节点以保证清单中都是可以正常访问的服务端节点，
+        此时当客户端的请求到达负载均衡服务器时，负载均衡服务器按照某种配置好的规则从可用服务端清单中选出一台服务器去处理客户端的请求。
+        这就是服务端负载均衡
+
+Ribbon
+Ribbon 模块如下：
+    •  ribbon-loadbalancer 负载均衡模块，可独立使用，也可以和别的模块一起使用 。Ribbon 内置的负载均衡算法都实现在其中 。
+    •  ribbon-eureka ：基于 Eureka 封装的模块，能够快速方便地集成 Eureka 。
+    •  ribbon-transport ： 基于 Netty 实现多协议的支持，比如 H坤 、 Tep 、 Udp 等。
+    •  ribbon-httpclient ：基于 Apache HttpClient 封装的 REST 客户端，集成了负载均衡模块，可以直接在项目中使用来调用接口 。
+    •  ribbon-example:  Ribbon 使用代码示例，通过这些示例能够让你的学习事半功倍。
+    •  ribbon-core ：一些比较核心且具有通用性的代码，客户端 API 的一些配置和其他 API的定义 
+
+
+Ribbon工作时分为两步：
+    第一步先选择	Eureka	Server,	它优先选择在同一个Zone且负载较少的Server；
+    第二步再根据用户指定的策略，在从Server取到的服务注册列表中选择一个地址。
+    其中Ribbon提供了三种策略：轮询、断路器和根据响应时间加权。
+
+    <!--	整合ribbon	-->
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-ribbon</artifactId>
+    </dependency>
+    使用@LoadBalanced 注解，为 RestTemplate 开启负载均衡的能力
+    @SpringBootApplication
+    @EnableDiscoveryClient
+    public	class	MovieRibbonApplication	{
+        /**
+            *	实例化RestTemplate，通过@LoadBalanced注解开启均衡负载能力.
+            *	@return	restTemplate
+            */
+        @Bean
+        @LoadBalanced
+        public	RestTemplate	restTemplate()	{
+                return	new	RestTemplate();
+        }
+        public	static	void	main(String[]	args)	{
+                SpringApplication.run(MovieRibbonApplication.class,	args);
+        }
+    }
+
+    @Service
+    public	class	RibbonService	{
+        @Autowired
+        private	RestTemplate	restTemplate;
+        public	User	findById(Long	id)	{
+            //	http://服务提供者的serviceId/url
+            return	this.restTemplate.getForObject("http://microservice-provider-user/"	+	id,	User.class);
+        }
+    }
+    @RestController
+    public	class	RibbonController	{
+        @Autowired
+        private	RibbonService	ribbonService;
+        @GetMapping("/ribbon/{id}")
+        public	User	findById(@PathVariable	Long	id)	{
+                return	this.ribbonService.findById(id);
+        }
+    }
+    
+    server:
+            port:	8010
+    spring:
+            application:
+                    name:	microservice-consumer-movie-ribbon
+    eureka:
+            client:
+                    serviceUrl:
+                            defaultZone:	http://discovery:8761/eureka/
+            instance:
+                    preferIpAddress:	true
+
+============================================REST客户端 Feign============================================
+JAVA 项目中接口调用
+    •  Httpclient :  HttpClient 是 Apache Jakarta Common 下的子项目，用来提供高效的 、 最
+        新的、功能丰富的支持 Http 协议的客户端编程工具包，井且它支持 Http 协议最新的
+        版本和建议。 HttpClient 相比传统 JDK 自带的 URLConnection ，增加了易用性和灵
+        活性，使客户端发送 Http 请求变得容易，提高了开发的效率。
+    •  Okhttp ：一个处理网络请求的开源项目，是安卓端最火的轻量级框架，由 Square 公
+        司贡献，用于替代 HttpUr!Connection 和 Apache HttpClient 。 OkHttp 有简洁的 API 、
+        高效的性能，并支持多种协议（ Http/ 2 和 SPDY ） 。
+    •  Httpurlconnection  :  HtφURLConnection 是 Java 的标准类，它继承自 URLConnection,
+        可用于向指定网站发送 GET 请求、 POST 请求。 H即URLConnection 使用比较复杂，
+        不像 HtψClient 那样容易使用 。
+    •  RestTemplate  :  RestTemplate 是 Spring 提供的用于访问 Rest 服务的客户端，
+        RestTemplate 提供了多种便捷访问远程 Http 服务的方法，能够大大提高客户端的编
+        写效率。
+    比上面的更简单，方便，它就是 Feign 。
+    
+    
+Spring	Cloud为Feign添加了Spring	MVC的注解支持，并整合了Ribbon和Eureka来为使用Feign时提供负载均衡
+	<dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-feign</artifactId>
+    </dependency>
+    
+    /**
+        *	使用@EnableFeignClients 开启Feign
+        *	@author	eacdy
+        */
+    @SpringBootApplication
+    @EnableFeignClients  如果你的 Feign 接口 定义跟你 的启动类不在一 个包名下，还需要制定扫描的包名＠EnableFeignClients (basePackages ＝"")
+    @EnableDiscoveryClient  服务提供者 或者消费者
+    public	class	MovieFeignApplication	{
+        public	static	void	main(String[]	args)	{
+            SpringApplication.run(MovieFeignApplication.class,	args);
+        }
+    }
+
+使用 Feign 调用接口
+    1、定义一个 Feign 的 客户端， 以 接口形式存在
+    @FeignClient(value  =”fsh-house ”, path  = ” / house ”) 
+    public  interface  HouseRemoteClient  { 
+        @GetMapping (”/hello ”} 
+        String  hello(); 
+    }
+    ＠FeignClient 注解。这个注解标识当前是一个 Feign 的客户端，value 属性是对应的服务名称，也就是你需要调用哪个服务中的接口，path 就是接口中URI 统一的前缀
+    定义方法时直接复制接口的定义即可，当然还有一种做法，就是将接口单独抽出来定义，然后在 Controller 中实现接口。
+    在调用的客户端中也实现了接口，从而达到接口共用的目的 ，若是在接口类中声明就不能共用了
+    
+    
+    
+    
+Feign 整合 Hystrix 服务窑错    
+    在属性文件中开启 Feign 对 Hystrix 的支持：
+    feign.hystrix.enabled=true 
+    
+    1. Fallback 方式
+    在 Feign 的 客户端类 上的 ＠FeignClient 注解 中指 定 fallback 进行回退
+    客户端类 HouseRemoteClient ，为其配置 fallback 。
+        @FeignClient (value  =  "fsh-house ”, path  = ” / house ”, configuration=FeignConfiguration.class,  fallback  =  HouseRemoteClientHystrix.class) 
+        public  interface  HouseRemoteClient  { 
+            @GetMapping （” ／ ｛ houseId ｝ ” ）
+            HouseinfoDto  hosueinfo(@PathVariable("houseid”) Long  houseid); 
+        }
+    HouseRemoteClientHystrix 类需要实现 HouseRemoteClient 类 中所有的方法 ，返回回退时的内容     
+        @Component 
+        public  class  HouseRemoteClientHystrix  implements  HouseRemoteClient  { 
+            @Override 
+            public  HouseInfoDto hosueinfo(Long  house 工d ){ 
+                return  new  HouseinfoDto();
+            }
+        }
+        
+    2. FallbackFactory 方式
+    通过 fallback 已 经可以实现服务不可用时回退的功能，如果你想知道触发回退的原因 ，可以使用 FallbackFactory 来实现回退功能
+    @Component 
+    public  class  HouseRemoteClientFallbackFactory  implements FallbackFactory<HouseRemoteClient>  { 
+            @Override 
+            public  HouseRemoteClient  create(final  Throwable  cause)  { 
+                return  new  HouseRemoteClient()  { 
+                    @Override 
+                    public  HouseinfoDto  hosueinfo(Long  houseid)  { 
+                        HouseinfoDto  info= new  HouseinfoDto(); 
+                        info.setData(new  Houseinfo(lL,””,””, cause. getMessage () ) ) ; 
+                        return  info;
+                }
+            }
+        }
+    }
+    
+Feign 中禁用 Hystrix    
+   禁用 Hystrix 还是 比较简单的，目前有两种方式可以禁用 ， 其中一种是在属性文件中进行全部禁用 。
+    feign.hystrix.enabled=false    

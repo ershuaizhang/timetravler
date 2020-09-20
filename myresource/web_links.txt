@@ -175,12 +175,6 @@ Linux命令：
 		http://www.xdowns.com/soft/38/138/2008/soft_44587.html
 	
 	
-文档下载：
-	鸠摩搜索 - 文档搜索引擎
-		https://www.jiumodiary.com/
-	
-	
-	
 Tomcat：
 	Tomcat 连接池调优
 		https://www.cnblogs.com/chenfool/p/6717681.html
@@ -267,6 +261,10 @@ Excel：
 	http://www.gequdaquan.net/gqss/
 	http://music.ifkdy.com/
 	http://music.zhuolin.wang/
+    
+软件下载： https://www.weidown.com/yinlebofang/11874.html
+            http://www.ddooo.com/softdown/176141.htm
+    
 视频 
 	https://www.ifun.tv/
 	http://www.5nj.com/index.html

@@ -16,3 +16,49 @@
     第三类：请求头参数以及Cookie    
         1、@RequestHeader
         2、@CookieValue
+
+
+3、配置文件的读取
+    Spring Boot 中的配置通常放在 application.properties 中，读取配
+    置信息是非常方便的，总共分为 3 种方式 ：
+    ( I )  Environment  ：可以通过 Environment 的 getProperty 方法来获取想要 的配置信息，12 令 第一部分准备篇
+        ／／ 读取配置
+            String  port  =  env.getProperty(”server.port”}; 
+
+    ( 2) @Value ：可以注入具体的配置信息，
+
+        ／／ 注入配置
+            @Value (”${ server.port}”) 
+            private  String  port; 
+    ( 3 ）自定义配置类： prefix 定义配置的前缀 
+
+    定义配置 application.properties 的方法如下：
+    corn.cxytiandi.name=yinjihuan 
+
+
+
+        @ConfigurationProperties(pre丑x ＝” com.cxytiand 工”）
+        @Component 
+        public  class  MyConfig  { 
+            private  String  name; 
+            public  String  getName()  { 
+                return  name; 
+            }
+            public  void  setName(String 口出ne) { 
+                this . name  =  name; 
+            }
+        }
+        
+    读取配置的方法如代码
+
+        @RestController 
+        public  class  HelloController  { 
+            @Autowired 
+            private  MyConfig  rnyConfig; 
+
+            @GetMapping("/hello”) 
+            public  String  hello()  { 
+                return  rnyConfig.getNane();
+            }
+        }
+
