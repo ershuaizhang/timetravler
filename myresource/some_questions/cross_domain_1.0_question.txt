@@ -59,7 +59,10 @@
 		},false);
 
 	5、抛弃HTTP，使用：Web Sockets； （看起来操作起来比较麻烦 先放放）
-		
+        <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
 
 
 

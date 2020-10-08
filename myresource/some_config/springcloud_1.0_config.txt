@@ -232,7 +232,7 @@ springCloud 支持最好的是Eureka 其次是 Consul 最后是Zookpeeper
     @Component 
     public  class  EurekaStateChangeListener  { 
         @EventListener 
-        public  void  listen(EurekaInstanceCanceledE ven t event)  { 
+        public  void  listen(EurekaInstanceCanceledEven t event)  { 
             System.err.println(event.getServerid()  +”\t"  + event.getAppName ( )  ＋” 服务下 线 ”）；
         }
         @EventListener 
@@ -241,11 +241,11 @@ springCloud 支持最好的是Eureka 其次是 Consul 最后是Zookpeeper
             System.err.println(instanceinfo.getAppName()  ＋” 进行注册 ”）；
         }
         @EventListener 
-        public  void  lIsten(EurekainstanceRenewedE v ent event)  { 
+        public  void  lIsten(EurekainstanceRenewedEvent event)  { 
             System.err.println(event.getServerid()  +  " \ t ”+ event.getAppName ( )  ＋” 服务进行续约 ”）；
         }
         @EventListener 
-        public  void  listen(EurekaRegistryAvail ableEvent  event)  { 
+        public  void  listen(EurekaRegistryAvailableEvent  event)  { 
             System.err.println （” 注册中心启动 ”）；
         }
         @EventListener 
@@ -547,12 +547,25 @@ Hystrix 监控
 
 
 ===============================================API网关控制器===============================================
+Zuul 是一个基于 JVM 路由和服务端的负载均衡器
+     提供路由 、 监控 、 弹性、安全等方面的服务框架 。 Zuul 能够与 Eureka 、 Ribbon 、 Hystrix 等组件配合使用
+     
+     其核心是过滤器的使用  通过过滤器可以实现下面的一些功能
+        ·动态路由：动态地将客户端的请求路由到后端不同的服务，做一些逻辑处理，比如聚合多个服务的数据返回 。
+        ·请求监控：可以对整个系统的请求进行监控，记录详细的请求响应日志，可以实时统计出当前系统的访问量以及监控状态 。
+        ·认证鉴权：对每一个访问的请求做认证，拒绝非法请求，保护好后端的服务。
+        ·压力测试：压力测试是一项很重要的工作，像一些电商公司需要模拟更多真实的用户并发量来保证重大活动时系统的稳定 。 
+            通过 Zuul 可以动态地将请求转发到后端服务的集群中，还可以识别测试流量和真实流量，从而做一些特殊处理。
+        ·灰度发布：灰度发布可以保证整体系统的稳定，在初始灰度 的时候就可以发现 、调整问题，以保证其影响度 。
+
+
 maven 依赖：
     <!--加入 Zuul 的依赖-->
     <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-zuul</artifactId>
     </dependency>
+    
     <!--集成 Eureka-->
     <dependency> 
         <groupId>org.springframework.cloud</groupid>
@@ -594,12 +607,54 @@ maven 依赖：
 
 
 Zunl 路由设置
-    当 Zuul 集成 E ureka 之后，其实就可以为 Eureka 中所有 的服务进行路 由操作了， 默认的转发规则就是“ API 网 关地址 ＋访问的服务名称 ＋接 口 URI ” 。 
+    当 Zuul 集成 Eureka 之后，其实就可以为 Eureka 中所有的服务进行路由操作了， 默认的转发规则就是“API网关地址＋访问的服务名称 ＋接口URI” 。 
     在给服务指定名称的时候，应尽量短一点，这样的话我们就可以用默认的路由规则进行请求，不需要为每个服务
     都定一个路由规则，这样就算新增了服务， API 网关也不用修改和重启了 
 
+        
+    指定具体服务路由   我们可以为每一个服务都配置一个路由转发规则    
+        zuul.routes.sh-house.path=/sh-house/** 
+        zuul.routes.sh-house.url=http://sh-house.com/ 
+    
+        这边 api-house ／材后面一定要配置两个星号，两个星号表示
+        可以转发任意层级的 URL ，比如“/api-house/house/l ” 。 如果只配置一个星号，那么就只能转发一级， 比如“ /api-house/house ”
+        
+    路由前缀
+        比如 http://cxytiandi.com/user/login 这是
+        一个登录的接口，现在想将其变成 http://cxytiandi.com/rest/user/login ，即在每个接口前面
+        加一个 rest ， 此时我们可以通过 Zuul 中的配置来进行实现 ：
+        zuul.prefix=/rest 
+        
+    本地跳转
+        Zuul 的 API 路由还提供了本地跳转功能，通过 forward 就可以实现。
+        zuul.routes.fsh-substitution.path=/api/** 
+        zuul.routes.fsh-substitution.url=forward:/local 
+        
+        当我们想在访问 api/J 的时候会路由到本地的 local/l 上去，就可参照上述代码实现。
+        local 这个接口需要我们自行添加，其是本地接口，故我们要建一个 Controller 
+        
+        @RestController 
+        public class  LocalController  { 
+            @GetMapping (”/local/{id}”) 
+            public  String  local(@PathVariable  String  id)  { 
+                return  id; 
+            }
+        }
+        然后访问 http://localhost:2l03/api/1 就可以看到我们想要的返回结果了
+    
 
-
+Zuul过滤器    
+    Zuul 中的过滤器总共有 4 种类型，每种类型都有对应的使用场景 。
+    •  pre ：可以在请求被路由之前调用 。 
+        适用于身份认证的场景，认证通过后再继续执行下面的流程。
+    •  route  ：在路由请求时被调用 。 
+        适用于灰度发布场景，在将要路由的时候可以做一些自定义 的逻辑 。
+    •  post ：在 route 和 error 过滤器之后被调用 。 
+        速种过滤器将请求路由到达具体的服务之后执行。 适用于需要添加响应头，记录响应日志等应用场景。
+    •  error ：处理请求时发生错误时被调用 。 
+        在执行过程中发送错误时会进入 error 过滤器，可以用来统一记录错误信息 。
+        
+        
 
 =============================================客户端负载均衡=============================================
 客户端负载均衡和服务端负载均衡最大的区别在于服务清单所存储的位置。
@@ -635,6 +690,11 @@ Ribbon工作时分为两步：
     <dependency>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-starter-ribbon</artifactId>
+    </dependency>
+    或者
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
     </dependency>
     使用@LoadBalanced 注解，为 RestTemplate 开启负载均衡的能力
     @SpringBootApplication
@@ -685,6 +745,44 @@ Ribbon工作时分为两步：
             instance:
                     preferIpAddress:	true
 
+
+ribbon 常用配置:
+    1 禁用 Eureka
+    当 我们在 RestTemplate 上添加 ＠LoadBalanced 注解后，就可 以用服务名 称来调用接口
+    了 ， 当有多个服务 的时候，还能做负载均衡。 这是因为 Eur eka 中的服务信息 已 经被拉取到
+    了客户端本地 ， 如果我们不想和 Eureka 集成， 可以通过下面的配置方法将其禁用 。
+    ＃ 禁用 Eureka
+    ribbon.Eureka.enabled=false
+
+    2 当 我们禁用 了 Eureka 之后，就不能使用服务名称去调用接口了 ， 必须指定服务地址。
+    禁用之后就需要手动配置调 用的服务地址了， 配置如下：
+    ＃ 禁用 Eureka 后手动配置服务地址
+    fsh-house.ribbon.listOfServers=localhost:8081,localhost:8083
+    这个配置是针对具体服务的，前缀就是服务名称 ， 配置完之后就可以和之前一样使用服务名称来调用接口了
+
+    3 配置负载均衡策略
+    ＃ 配置负载均衡策略
+    fsh-house.ribbon.NFLoadBalancerRuleClassName=com.netfl工x.loadbalancer.RandomRule
+
+    4 超时时间
+    Ribbon 中有两种时间相关的设置， 分别是请求连接的超时时间和请求处理的超时时间，设置规则如下：
+    ＃ 请求连接的超时时间
+    ribbon.connectTimeout=2000
+    ＃ 请求处理的超时时间
+    ribbon.readTimeout=5OOO
+    
+    
+一个疑问：为什么在 RestTemplate 上加了一个＠LoadBalanced 之后，RestTemplate 就能够跟 Eureka 结合了，可以使用服务名称去调用接口，还可以负载均衡？
+
+    这功劳应归于 Spring Cloud 给我们做了大量的底层工作，因为它将这些都封装好了，我们用起来才会那么简单。
+    框架就是为了简化代码，提高效率而产生的 。
+    主要的逻辑就是给 RestTemplate 增加拦截器，在请求之前对请求的地址进行替换，或
+    者根据具体的负载策略选择服务地址 ，然后再去调用 ，这就是＠LoadBalanced 的原理。
+    
+    
+    
+    
+    
 ============================================REST客户端 Feign============================================
 JAVA 项目中接口调用
     •  Httpclient :  HttpClient 是 Apache Jakarta Common 下的子项目，用来提供高效的 、 最

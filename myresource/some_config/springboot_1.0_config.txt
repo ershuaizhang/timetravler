@@ -76,7 +76,7 @@
 @EnableSched(cron='')定时器表达式注解
 @Scheduled 定时器表达式注解
 @EnableAsync 开启异步调用
-@Async 注解 辨识对应的代码是在线程池中进行异步进行的 直接在 Controller 中调用这个业务方法， 它就是异 步 执行的， 会 在 默认的线程池中去执行
+@Async 注解 辨识对应的代码是在线程池中进行异步进行的 直接在 Controller 中调用这个业务方法(不能在类的内部直接进行调用)，它就是异步执行的，会在默认的线程池中去执行
 
 @ConfigurationProperties(prefix = "myClass")这个是读取springboot配置文件信息
 @EnableConfigurationProperties(value = { DBConfig1.class, DBConfig2.class }) 这个注解用来优先加载配置类的

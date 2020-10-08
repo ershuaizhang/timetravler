@@ -14,3 +14,9 @@ Web服务器：一般指像nginx，apache这类的服务器，他们一般只能
 
 
 
+
+四种跨域请求资源的方案  https://zhuanlan.zhihu.com/p/50416743
+    野路子出身却好用的方式：JSONP；
+    官方推荐的跨域资源共享方案：CORS；
+    使用HTML5 API：postMessage；
+    抛弃HTTP，使用：Web Sockets；
