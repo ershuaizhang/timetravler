@@ -52,32 +52,57 @@
 	选择相应快的DNS服务器添加到 C:\Windows\System32\drivers\etc\hosts 即可
 	https://blog.csdn.net/qq_30460905/article/details/80205636
     
-# GitHub begin
-140.82.114.4 github.com 
-140.82.112.10 codeload.github.com
-140.82.113.3 github.com
-140.82.114.4 gist.github.com
-185.199.110.153 assets-cdn.github.com
-199.232.68.133 raw.githubusercontent.com
-199.232.68.133 gist.githubusercontent.com
-199.232.68.133 cloud.githubusercontent.com
-199.232.68.133 camo.githubusercontent.com
-199.232.69.194 github.global.ssl.fastly.net
-199.232.68.133 avatars0.githubusercontent.com
-199.232.68.133 avatars1.githubusercontent.com
-199.232.68.133 avatars2.githubusercontent.com
-199.232.68.133 avatars3.githubusercontent.com
-199.232.68.133 avatars4.githubusercontent.com
-199.232.68.133 avatars5.githubusercontent.com
-199.232.68.133 avatars6.githubusercontent.com
-199.232.68.133 avatars7.githubusercontent.com
-199.232.68.133 avatars8.githubusercontent.com
-140.82.114.6 api.github.com
-140.82.114.25 live.github.com
-185.199.110.153 http://documentcloud.github.com
-140.82.113.9 http://nodeload.github.com
-199.232.68.133 http://raw.github.com
-52.205.36.92 http://status.github.com
-140.82.112.18 http://training.github.com
-# GitHub End
+    # GitHub begin
+    140.82.114.4 github.com 
+    140.82.112.10 codeload.github.com
+    140.82.113.3 github.com
+    140.82.114.4 gist.github.com
+    185.199.110.153 assets-cdn.github.com
+    199.232.68.133 raw.githubusercontent.com
+    199.232.68.133 gist.githubusercontent.com
+    199.232.68.133 cloud.githubusercontent.com
+    199.232.68.133 camo.githubusercontent.com
+    199.232.69.194 github.global.ssl.fastly.net
+    199.232.68.133 avatars0.githubusercontent.com
+    199.232.68.133 avatars1.githubusercontent.com
+    199.232.68.133 avatars2.githubusercontent.com
+    199.232.68.133 avatars3.githubusercontent.com
+    199.232.68.133 avatars4.githubusercontent.com
+    199.232.68.133 avatars5.githubusercontent.com
+    199.232.68.133 avatars6.githubusercontent.com
+    199.232.68.133 avatars7.githubusercontent.com
+    199.232.68.133 avatars8.githubusercontent.com
+    140.82.114.6 api.github.com
+    140.82.114.25 live.github.com
+    185.199.110.153 http://documentcloud.github.com
+    140.82.113.9 http://nodeload.github.com
+    199.232.68.133 http://raw.github.com
+    52.205.36.92 http://status.github.com
+    140.82.112.18 http://training.github.com
+    # GitHub End
+
+4、解决Git中fatal: refusing to merge unrelated histories
+    https://blog.csdn.net/u012145252/article/details/80628451
+    
+    问题
+        1、本地初始化了git仓库，放了一些文件进去并进行了add操作和commit提交操作；
+        $git add -A
+        $git commit -m "start 2018-06-06"
+
+        2、github创建了git仓库并建立了README文件；
 			
+        3、本地仓库添加了github上的git仓库作为远程仓库，起名origin；    
+        
+        4、问题来了，本地仓库在想做同步远程仓库到本地为之后本地仓库推送到远程仓库做准备时报错了，错误如下：
+
+            fatal: refusing to merge unrelated historiesal
+            （拒绝合并不相关的历史）
+    
+    解决
+        出现这个问题的最主要原因还是在于本地仓库和远程仓库实际上是独立的两个仓库。
+        假如我之前是直接clone的方式在本地建立起远程github仓库的克隆本地仓库就不会有这问题了。
+        发现可以在pull命令后紧接着使用--allow-unrelated-history选项来解决问题（该选项可以合并两个独立启动仓库的历史）。
+        
+        
+        
+        

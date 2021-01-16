@@ -1,0 +1,35 @@
+﻿最新版Android Studio设置国内镜像代理(解决无法更新的问题)
+    https://blog.csdn.net/yihui8/article/details/108186571
+    
+    
+连接模拟器
+    mumu连 它
+        第一步 : 找到MuMu模拟器的 adb_server.exe文件
+
+        第二步 : 打开MuMu模拟器(如果不运行,第六步执行不了,别忘了)
+
+        第三步 : 点击屏幕左下角"开始"按钮,并输入cmd,打开cmd.exe
+
+        第四部 : 因为我的 adb_server.exe在D盘下,先跳一下盘符,直接输入d:,点击回车即可
+
+        第五步 : 复制 adb_server.exe的全路径,先输入cd+空格 ,再鼠标右键粘贴(cmd中不支持Ctrl+v),回车
+
+        第六步 : 复制 adb_server.exe connect 127.0.0.1:7555,粘贴到D:\...\bin>之后,回车(如果MuMu模拟器没有打开,会显示连接失败)
+
+        第七步 : 点击AS运行,就能搜索到MuMu模拟器了!!!
+
+        作者：MrZac_
+        链接：https://www.jianshu.com/p/7df948707294
+        来源：简书
+        著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+    
+    它连 mumu
+        输入D:\Program Files\Android\Sdk\platform-tools　　　　（adb所在的路径）
+        再输入：adb connect 127.0.0.1:7555
+        
+        https://www.cnblogs.com/ishai/p/11068899.html
+        
+        
+        
+Android Studio和Gradle使用不同位置JDK的问题(Android Studioand Gradle are using different locations forthe JDK)
+    https://blog.csdn.net/Zhongtongyi/article/details/104563327        

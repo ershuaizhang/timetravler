@@ -1,0 +1,101 @@
+﻿Android中textview居中显示 https://www.cnblogs.com/wangguangjian/p/8693215.html
+    android:gravity="center"    android:textAlignment="center"  
+
+        <?xml version="1.0" encoding="utf-8"?>
+        <manifest xmlns:android=http://schemas.android.com/apk/res/android
+            package="com.xxx.app"
+            android:versio  nCode="1"
+            android:versionName="1.0" >
+
+            <uses-sdk
+                android:minSdkVersion="8"
+                android:targetSdkVersion="17" />
+
+            <application
+                android:allowBackup="true"
+                android:icon="@drawable/ic_launcher"
+                android:label="@string/app_name"  #设置应用列表中应用名称
+                android:theme="@style/AppTheme" >
+                <activity
+                    android:name="com.supdo.demos.LoginActivity"
+                    android:label="@string/app_name" #设置手机桌面上图标下面的名称
+                    android:windowSoftInputMode="adjustResize|stateVisible" >
+                    <intent-filter>
+                        <action android:name="android.intent.action.MAIN" />
+                        <category android:name="android.intent.category.LAUNCHER" />
+                    </intent-filter>
+                </activity>
+            </application>
+        </manifest>
+
+    
+Android 去掉界面标题栏的方法    
+    https://www.cnblogs.com/wukong1688/p/10662084.html  
+    https://blog.csdn.net/FL1623863129/article/details/72782195 
+    https://blog.csdn.net/Dreaming_terry/article/details/51184508
+
+
+    这个首先要区分当前Activity 是继承了 Activity 类 ，还是 AppCompatActivity 类
+
+    情况一:创建的activity默认继承了AppCompatActivity
+
+        方法一)全局设置
+
+            可以在AndroidManifest.xml中作如下配置，这样就没有标题栏了
+            <application android:theme="@style/Theme.AppCompat.NoActionBar">
+
+        方法二)针对当前页面单独设置
+
+            getSupportActionBar().hide();
+            //去掉标题栏注意这句一定要写在setContentView()方法的后面
+
+    情况二:创建的activity默认继承了Activity
+
+        方法一)全局设置
+
+            <application android:theme="@android:style/Theme.NoTitleBar">
+            这样写的话，整个应用都会去掉标题栏，如果只想去掉某一个Activity的标题栏的话，可以把这个属性加到某个activity标签里面
+
+        方法二)针对当前页面单独设置
+
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            //去掉标题栏注意这句一定要写在setContentView()方法的前面，不然会报错的
+            
+            
+            
+            
+android studio 使用 databinding 基础配置
+    https://blog.csdn.net/sinat_30288471/article/details/83276371  
+    https://blog.csdn.net/qq_32209403/article/details/58594483    
+    https://blog.csdn.net/sunweihao2019/article/details/105560068
+    https://blog.csdn.net/qiang_xi/article/details/73849556
+    https://blog.csdn.net/weixin_44613063/article/details/103553014
+
+    https://blog.csdn.net/qq_36721220/article/details/111689803
+    
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            

@@ -1,0 +1,129 @@
+﻿Maven
+    maven 配置指南
+    打开 maven 的配置文件（ windows 机器一般在 maven 安装目录的 conf/settings.xml ），在<mirrors></mirrors>标签中添加 mirror 子节点:
+
+    <mirror>
+      <id>aliyunmaven</id>
+      <mirrorOf>*</mirrorOf>
+      <name>阿里云公共仓库</name>
+      <url>https://maven.aliyun.com/repository/public</url>
+    </mirror>
+    如果想使用其它代理仓库，可在<repositories></repositories>节点中加入对应的仓库使用地址。以使用 spring 代理仓为例：
+
+    <repository>
+      <id>spring</id>
+      <url>https://maven.aliyun.com/repository/spring</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+    在你的 pom.xml 文件<denpendencies></denpendencies>节点中加入你要引用的文件信息：
+
+    <dependency>
+      <groupId>[GROUP_ID]</groupId>
+      <artifactId>[ARTIFACT_ID]</artifactId>
+      <version>[VERSION]</version>
+    </dependency>
+    执行拉取命令：
+
+    mvn install
+
+
+
+gradle
+    gradle 配置指南
+    在 build.gradle 文件中加入以下代码:
+
+    allprojects {
+      repositories {
+        maven {
+          url 'https://maven.aliyun.com/repository/public/'
+        }
+        mavenLocal()
+        mavenCentral()
+      }
+    }
+    如果想使用其它代理仓，以使用spring仓为例，代码如下:
+
+    allProjects {
+      repositories {
+        maven {
+          url 'https://maven.aliyun.com/repository/public/'
+        }
+        maven {
+          url 'https://maven.aliyun.com/repository/spring/'
+        }
+        mavenLocal()
+        mavenCentral()
+      }
+    }
+    加入你要引用的文件信息：
+
+    dependencies {
+      compile '[GROUP_ID]:[ARTIFACT_ID]:[VERSION]'
+    }
+    执行命令：
+
+    gradle dependencies 或 ./gradlew dependencies 安装依赖
+
+
+
+
+
+
+阿里云云效 是企业级一站式 DevOps 平台，覆盖产品从需求到运营的研发全生命周期，其中云效也提供了免费、可靠的Maven私有仓库 Packages，欢迎您体验使用。
+
+
+    仓库名称
+    阿里云仓库地址
+    阿里云仓库地址(老版)
+    源地址
+
+    central
+    https://maven.aliyun.com/repository/central
+    https://maven.aliyun.com/nexus/content/repositories/central
+    https://repo1.maven.org/maven2/
+    
+    jcenter
+    https://maven.aliyun.com/repository/public
+    https://maven.aliyun.com/nexus/content/repositories/jcenter
+    http://jcenter.bintray.com/
+    
+    public
+    https://maven.aliyun.com/repository/public
+    https://maven.aliyun.com/nexus/content/groups/public
+    central仓和jcenter仓的聚合仓
+    
+    google
+    https://maven.aliyun.com/repository/google
+    https://maven.aliyun.com/nexus/content/repositories/google
+    https://maven.google.com/
+    
+    gradle-plugin
+    https://maven.aliyun.com/repository/gradle-plugin
+    https://maven.aliyun.com/nexus/content/repositories/gradle-plugin
+    https://plugins.gradle.org/m2/
+    
+    spring
+    https://maven.aliyun.com/repository/spring
+    https://maven.aliyun.com/nexus/content/repositories/spring
+    http://repo.spring.io/libs-milestone/
+    
+    spring-plugin
+    https://maven.aliyun.com/repository/spring-plugin
+    https://maven.aliyun.com/nexus/content/repositories/spring-plugin
+    http://repo.spring.io/plugins-release/
+    
+    grails-core
+    https://maven.aliyun.com/repository/grails-core
+    https://maven.aliyun.com/nexus/content/repositories/grails-core
+    https://repo.grails.org/grails/core
+    
+    apache snapshots
+    https://maven.aliyun.com/repository/apache-snapshots
+    https://maven.aliyun.com/nexus/content/repositories/apache-snapshots
+    https://repository.apache.org/snapshots/
+    
