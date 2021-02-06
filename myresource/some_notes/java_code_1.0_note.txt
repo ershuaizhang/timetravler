@@ -55,3 +55,40 @@ String转Integer
             return false;
     }
  
+ 
+indexOf 和 lastIndexOf的区别
+    indexOf 和  lastIndexOf 是什么？
+    　　indexOf 和 lastIndexOf 都是索引文件
+    　　indexOf 是查某个指定的字符串在字符串首次出现的位置（索引值）（从左往右）
+           lastIndexOf 是查某个指定的字符串在字符串最后一次出现的位置（索引值）（从右往左）
+           eg：    
+            var a="asdfghjkl"
+            a.indexOf("d") // 2
+            a.lastIndexOf("d") // 2
+
+    注意：　　
+            接下来在看一个例子：
+            var a="asdddfghjkl"
+            a.indexOf("d") // 2
+            a.lastIndexOf("d") // 4
+            
+
+    　　　这个时候两个返回的索引值就不同了
+     
+
+    总结：
+    　　　当数组（字符串）中所要查询的数（字符串/字符）在字符串（数组）中只出现一次的时候 二者返回的索引值相同
+    　　　当数组（字符串）中所要查询的数（字符串/字符）在字符串（数组）中出现两次及以上的时候  
+    　　　　　　indexOf  返回的是 valuesearch 第一次在数组（字符串）出现的位置（从左往右）
+    　　　　　　lastIndexOf 返回的是 valuesearch 最后一次在数组（字符串）出现的位置（从右往左）
+    补充说明
+
+    定义：lastIndexOf() 方法可返回一个指定的元素在数组中最后出现的位置，从该字符串的后面向前查找。
+
+    * lastIndexOf()方法虽然是从后往前搜索，但返回的位置是从前开始数的
+    
+    
+    
+
+
+
